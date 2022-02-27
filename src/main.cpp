@@ -921,15 +921,19 @@ void enableCurrentModeDisplayControls() {
   }
 }
 
-void setPixel(int Pixel, byte red, byte green, byte blue) {
+void setPixelRGB(int Pixel, byte red, byte green, byte blue) {
   leds[Pixel].r = red;
   leds[Pixel].g = green;
   leds[Pixel].b = blue;
 }
 
+void setPixel(int ledIndex, byte firstColorParam, byte secondColorParam, byte thirdColorParam = 255) {
+  leds[ledIndex] = CHSV(firstColorParam, secondColorParam, thirdColorParam);
+}
+
 void setAll(byte red, byte green, byte blue) {
   for (int i = 0; i < LED_COUNT; i++ ) {
-    setPixel(i, red, green, blue);
+    setPixelRGB(i, red, green, blue);
   }
   FastLED.show();
 }
@@ -1005,13 +1009,13 @@ void Sparkle() {
     if (hasMillisTimer == false) {
       index = random(LED_COUNT);
       if (isInRandomMode == true) {
-        leds[index] = CHSV(random(0,255), 255, 255);
+        setPixel(index, random(0,255), 255, 255);
       } else if (isInSetMode == true) {
-        leds[index] = CHSV(firstEncoderValue, secondEncoderValue, 255);
+        setPixel(index, firstEncoderValue, secondEncoderValue);
       }
-      FastLED.show();
-      leds[index] = CHSV(0, 0, 0);
+      setPixel(index, 0, 0, 0);
 
+      FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
     } else if (hasMillisTimer == true) {
@@ -1044,8 +1048,9 @@ void activate_rainbow_vertical() {
         ihue = 0;
       }
       int secondIndex = horizontal_index(index);
-      leds[index] = CHSV(ihue, 255, 255);
-      leds[secondIndex] = CHSV(ihue, 255, 255);
+      setPixel(index, ihue, 255);
+      setPixel(secondIndex, ihue, 255);
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1079,7 +1084,8 @@ void activate_new_rainbow_loop() {
       } else if (raindowIhue <= 0) {
         raindowIhue = 254;
       }
-      fill_rainbow( leds, LED_COUNT, raindowIhue, gapsBetweenGroupsOfDiods);
+      fill_rainbow(leds, LED_COUNT, raindowIhue, gapsBetweenGroupsOfDiods);
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1111,13 +1117,13 @@ void theaterChaseRainbow() {
         for (int i = 0; i < LED_COUNT - numberOfGapsAndActivatedDiods - index; i = i + numberOfGapsAndActivatedDiods) {  
           c = Wheel( (i + indexColour) % 255);
           for (int j = 0; j < numberOfActivatedDiods; j = j + 1) {
-            setPixel(i + j + index, *c, *(c + 1), *(c + 2));
+            setPixelRGB(i + j + index, *c, *(c + 1), *(c + 2));
           }
         }
         FastLED.show();
         for (int i = 0; i < LED_COUNT - numberOfGapsAndActivatedDiods - index; i = i + numberOfGapsAndActivatedDiods) {
           for (int j = 0; j < numberOfActivatedDiods; j = j + 1) {
-          setPixel(i + j + index, 0, 0, 0);
+          setPixelRGB(i + j + index, 0, 0, 0);
           } 
         }
         index += 1;
@@ -1131,13 +1137,13 @@ void theaterChaseRainbow() {
         for (int i = LED_COUNT; i > numberOfGapsAndActivatedDiods + index; i = i - numberOfGapsAndActivatedDiods) {
           c = Wheel( (i + indexColour) % 255);
           for (int j = numberOfActivatedDiods; j > 0; j = j - 1) {
-            setPixel(i - j - index,  *c, *(c + 1), *(c + 2));
+            setPixelRGB(i - j - index,  *c, *(c + 1), *(c + 2));
           }
         }
         FastLED.show();
         for (int i = LED_COUNT; i > numberOfGapsAndActivatedDiods + index; i = i - numberOfGapsAndActivatedDiods) {
           for (int j = numberOfActivatedDiods; j > 0; j = j - 1) {
-            setPixel(i - j - index,  0, 0, 0);
+            setPixelRGB(i - j - index,  0, 0, 0);
           }
         }
         index += 1;
@@ -1146,6 +1152,7 @@ void theaterChaseRainbow() {
           indexColour += firstEncoderValue / 10;
         }
       }
+
       hasMillisTimer = true;
       millisTimer = millis();
     } else if (hasMillisTimer == true) {
@@ -1168,20 +1175,21 @@ void activate_random_march() {
     }
     if (hasMillisTimer == false) {
       if (isDirectionRight == true) {
-        leds[0] = CHSV(random(0, 255), 255, 255);
+        setPixel(0, random(0, 255), 255);
         for (int i = LED_COUNT - 1; i > 0 ; i-- ) {
           leds[i].r = leds[i - 1].r;
           leds[i].g = leds[i - 1].g;
           leds[i].b = leds[i - 1].b;
         }
       } else if (isDirectionLeft == true) {
-        leds[LED_COUNT - 1] = CHSV(random(0, 255), 255, 255);
+        setPixel(LED_COUNT - 1, random(0, 255), 255);
         for (int i = 0; i < LED_COUNT - 1 ; i++ ) {
           leds[i].r = leds[i + 1].r;
           leds[i].g = leds[i + 1].g;
           leds[i].b = leds[i + 1].b;
         }
       }
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1208,7 +1216,8 @@ void activate_random_burst() {
     if (hasMillisTimer == false) {
       index = random(0, LED_COUNT);
       ihue = random(0, 255);
-      leds[index] = CHSV(ihue, 255, 255);
+      setPixel(index, ihue, 255);
+      
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1272,6 +1281,7 @@ void activate_rwb_march() {
           leds[i].b = leds[i + 1].b;
         }
       }
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1333,10 +1343,10 @@ void activate_rgb_propeller() {
         leds[j1] = CHSV(ghue, secondEncoderValue, 255);
         leds[j2] = CHSV(bhue, secondEncoderValue, 255);
       }
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
-      
     } else if (hasMillisTimer == true) {
       if (millis() - millisTimer > delayTime) {
         hasMillisTimer = false;
@@ -1355,11 +1365,11 @@ int antipodal_index(int i) {
 
 void activate_ems_lightsONE() {
   int index = 0;
-  int colorParam;
+  int firstColorParam;
   if (isInRandomMode) {
-    colorParam = random(0, 255);
+    firstColorParam = random(0, 255);
   } else if (isInSetMode) {
-    colorParam = firstEncoderValue;
+    firstColorParam = firstEncoderValue;
   }
   while (true) {
     decoder.update();
@@ -1376,23 +1386,23 @@ void activate_ems_lightsONE() {
         if (index >= LED_COUNT) {
           index = 0;
           if (isInRandomMode) {
-            colorParam = random(0, 255);
+            firstColorParam = random(0, 255);
           } else if (isInSetMode) {
-            colorParam = firstEncoderValue;
+            firstColorParam = firstEncoderValue;
           }
         }
         int idexR = index;
         int idexB = antipodal_index(idexR);
-        int thathue = (colorParam + 160) % 255;
+        int thathue = (firstColorParam + 160) % 255;
         for (int i = 0; i < LED_COUNT; i++ ) {
           if (i == idexR) {
-            leds[i] = CHSV(colorParam, 255, 255);
+            setPixel(i, firstColorParam, 255);
           }
           else if (i == idexB) {
-            leds[i] = CHSV(thathue, 255, 255);
+            setPixel(i, thathue, 255);
           }
           else {
-            leds[i] = CHSV(0, 0, 0);
+            setPixel(i, 0, 0);            
           }
         }
       } else if (isDirectionLeft == true) {
@@ -1400,27 +1410,28 @@ void activate_ems_lightsONE() {
         if (index <= 0) {
           index = LED_COUNT -1;
           if (isInRandomMode) {
-            colorParam = random(0, 255);
+            firstColorParam = random(0, 255);
           } else if (isInSetMode) {
-            colorParam = firstEncoderValue;
+            firstColorParam = firstEncoderValue;
           }
 
         }
         int idexR = index;
         int idexB = antipodal_index(idexR);
-        int thathue = (colorParam + 160) % 255;
+        int thathue = (firstColorParam + 160) % 255;
         for (int i = LED_COUNT; i > 0; i = i - 1) {
           if (i == idexR) {
-            leds[i] = CHSV(colorParam, 255, 255);
+            setPixel(i, firstColorParam, 255);
           }
           else if (i == idexB) {
-            leds[i] = CHSV(thathue, 255, 255);
+            setPixel(i, thathue, 255);
           }
           else {
-            leds[i] = CHSV(0, 0, 0);
+            setPixel(i, 0, 0);            
           }
         }
       }
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1455,10 +1466,14 @@ void activate_matrix() {
       if (isDirectionRight == true) {
         int rand = random(0, 100);
         if (rand > 90) {
-          leds[0] = CHSV(firstColorParam, secondColorParam, 255);
+          setPixel(0, firstColorParam, secondColorParam);
         }
         else {
-          leds[0] = CHSV(firstColorParam, secondColorParam, 0);
+          // зачем передавать диоду первые 2 параметра, если он
+          // не будет гореть? 
+          //TODO протестировать без первых двух параметров 
+          setPixel(0, firstColorParam, secondColorParam, 0);
+          //leds[0] = CHSV(firstColorParam, secondColorParam, 0);
         }
         for (int i = LED_COUNT-1; i > 0 ; i-- ) {
           leds[i].r = leds[i - 1].r;
@@ -1468,10 +1483,10 @@ void activate_matrix() {
       } else if (isDirectionLeft == true) {
         int rand = random(0, 100);
         if (rand > 90) {
-          leds[LED_COUNT-1] = CHSV(firstColorParam, secondColorParam, 255);
+          setPixel(LED_COUNT - 1, firstColorParam, secondColorParam);
         }
         else {
-          leds[LED_COUNT-1] = CHSV(firstColorParam, secondColorParam, 0);
+          setPixel(LED_COUNT - 1, firstColorParam, secondColorParam, 0);
         }
         for (int i = 0; i < LED_COUNT ; i++ ) {
           leds[i].r = leds[i + 1].r;
@@ -1479,6 +1494,7 @@ void activate_matrix() {
           leds[i].b = leds[i + 1].b;
         }
       }
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1533,13 +1549,13 @@ void CylonBounce() {
       }
 
       setAll(0, 0, 0);
-      leds[index] = CHSV(firstColorParam, secondColorParam, 100);
-      for (int j = 1; j <= numberOfActivatedDiods; j++) {      
-        leds[index + j] = CHSV(firstColorParam, secondColorParam, 255);
+      setPixel(index, firstColorParam, secondColorParam, 100);
+      for (int j = 1; j <= numberOfActivatedDiods; j++) {
+        setPixel(index + j, firstColorParam, secondColorParam);      
       }
-      leds[index + numberOfActivatedDiods + 1] = CHSV(firstColorParam, secondColorParam, 100);
+      setPixel(index + numberOfActivatedDiods + 1, firstColorParam, secondColorParam, 100);
+      
       FastLED.show();
-
       hasMillisTimer = true;
       millisTimer = millis();
     } else if (hasMillisTimer == true) {
@@ -1594,17 +1610,19 @@ void twoDiodsGroup() {
 
       setAll(0, 0, 0);
 
-      leds[index] = CHSV(firstColorParam, secondColorParam, 100);
+      setPixel(index, firstColorParam, secondColorParam, 100);
       for (int j = 1; j <= numberOfActivatedDiods; j++) {
-        leds[index + j] = CHSV(firstColorParam, secondColorParam, 255);
+        setPixel(index + j, firstColorParam, secondColorParam);      
       }
-      leds[index + numberOfActivatedDiods + 1] = CHSV(firstColorParam, secondColorParam, 100);
+      setPixel(index + numberOfActivatedDiods + 1, firstColorParam, secondColorParam, 100);
 
-      leds[LED_COUNT - index] = CHSV(firstColorParam, secondColorParam, 100);
+      setPixel(LED_COUNT - index, firstColorParam, secondColorParam, 100);
       for (int j = 1; j <= numberOfActivatedDiods; j++) {
-        leds[LED_COUNT - index - j] = CHSV(firstColorParam, secondColorParam, 100);
+        setPixel(LED_COUNT - index - j, firstColorParam, secondColorParam);
+        //TODO почему тут 100?      
+        //leds[LED_COUNT - index - j] = CHSV(firstColorParam, secondColorParam, 100);
       }
-      leds[LED_COUNT - index - numberOfActivatedDiods - 1] = CHSV(firstColorParam, secondColorParam, 100);
+      setPixel(LED_COUNT - index - numberOfActivatedDiods - 1, firstColorParam, secondColorParam, 100);
 
       FastLED.show();
       hasMillisTimer = true;
@@ -1650,13 +1668,13 @@ void theaterChase() {
 
         for (int i = 0; i < LED_COUNT - numberOfGapsAndActivatedDiods - index; i = i + numberOfGapsAndActivatedDiods) {  
           for (int j = 0; j < numberOfActivatedDiods; j = j + 1) {
-            leds[i + j + index] = CHSV(firstColorParam, secondColorParam, 255);
+            setPixel(i + j + index, firstColorParam, secondColorParam);
           }
         }
         FastLED.show();
         for (int i = 0; i < LED_COUNT - numberOfGapsAndActivatedDiods - index; i = i + numberOfGapsAndActivatedDiods) {
           for (int j = 0; j < numberOfActivatedDiods; j = j + 1) {
-            leds[i + j + index] = CHSV(0, 0, 0);
+            setPixel(i + j + index, 0, 0);
           } 
         }
         index += 1;
@@ -1668,13 +1686,13 @@ void theaterChase() {
 
         for (int i = LED_COUNT; i > numberOfGapsAndActivatedDiods + index; i = i - numberOfGapsAndActivatedDiods) {
           for (int j = numberOfActivatedDiods; j > 0; j = j - 1) {
-            leds[i - j - index] = CHSV(firstColorParam, secondColorParam, 255);
+            setPixel(i - j - index, firstColorParam, secondColorParam);
           }
         }
         FastLED.show();
         for (int i = LED_COUNT; i > numberOfGapsAndActivatedDiods + index; i = i - numberOfGapsAndActivatedDiods) {
           for (int j = numberOfActivatedDiods; j > 0; j = j - 1) {
-            leds[i - j - index] = CHSV(0, 0, 0);
+            setPixel(i - j - index, 0, 0);
           }
         }
         index += 1;
@@ -1682,6 +1700,7 @@ void theaterChase() {
           index = 0;
         }
       }
+
       hasMillisTimer = true;
       millisTimer = millis();
     } else if (hasMillisTimer == true) {
@@ -1725,7 +1744,7 @@ void meteorRain() {
         }
         for(int j = 0; j < numberOfActivatedDiods; j++) {
           if( (index-j <LED_COUNT) && (index-j>=0) ) {
-            leds[index-j] = CHSV(firstColorParam, secondColorParam, 255);
+            setPixel(index - j, firstColorParam, secondColorParam);
           }
         }
         
@@ -1749,11 +1768,12 @@ void meteorRain() {
         }
         for(int j = numberOfActivatedDiods; j > 0; j--) {
           if( (index-j < LED_COUNT) && (index-j>=0) ) {
-            leds[index-j] = CHSV(firstColorParam, secondColorParam, 255);
+            setPixel(index - j, firstColorParam, secondColorParam);
           }
         }
         
       }
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();  
@@ -1780,7 +1800,7 @@ void RunningLights() {
       Position++;
       for (int i = 0; i < LED_COUNT; i++) {
         leds[i] = CHSV(((sin(i + Position) * 127 + 128) / 255)*firstEncoderValue, secondEncoderValue, 255);
-        //setPixel(i, ((sin(i + Position) * 127 + 128) / 255)*secondEncoderValue,
+        //setPixelRGB(i, ((sin(i + Position) * 127 + 128) / 255)*secondEncoderValue,
         //         ((sin(i + Position) * 127 + 128) / 255)*firstEncoderValue,
         //         ((sin(i + Position) * 127 + 128) / 255)*thirdEncoderValue);
       }
@@ -1811,11 +1831,9 @@ void colorWipe() {
     if (hasMillisTimer == false) {
       index += 1;
       if (isStartToLightUp == true) {
-        leds[index] = CHSV(firstEncoderValue, secondEncoderValue, 255);
-        //setPixel(index, secondEncoderValue, firstEncoderValue, thirdEncoderValue);
+        setPixel(index, firstEncoderValue, secondEncoderValue);
       } else if (isStartToLightUp == false) {
-        leds[index] = CHSV(0, 0, 0);
-        //setPixel(index, 0, 0, 0);
+        setPixel(index, 0, 0, 0);
       }
       if (index == LED_COUNT - 1) {
         index = 0;
@@ -1825,6 +1843,7 @@ void colorWipe() {
           isStartToLightUp = true;
         }
       }
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1855,10 +1874,11 @@ void activate_sin_bright_wave() {
         tcount = 0.0;
       }
       int ibright = int(sin(tcount) * 255);
-      leds[index] = CHSV(firstEncoderValue, secondEncoderValue, ibright);
+      setPixel(index, firstEncoderValue, secondEncoderValue, ibright);
       if (index == LED_COUNT - 1) {
         index = 0;
       }
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1874,7 +1894,6 @@ void activate_fade_vertical() {
   int fadeVerticalCounter = 0;
   int index = 0;
   while (true) {
-
     decoder.update();
     decoder2.update();
     if (isSomethingChanged == true) {
@@ -1889,15 +1908,16 @@ void activate_fade_vertical() {
       {
         index = 0;
       }
-      int idexA = index;
-      int idexB = horizontal_index(idexA);
+      int indexA = index;
+      int indexB = horizontal_index(indexA);
       fadeVerticalCounter = fadeVerticalCounter + 10;
       if (fadeVerticalCounter > 255)
       {
         fadeVerticalCounter = 0;
       }
-      leds[idexA] = CHSV(firstEncoderValue, secondEncoderValue, fadeVerticalCounter);
-      leds[idexB] = CHSV(firstEncoderValue, secondEncoderValue, fadeVerticalCounter);
+      setPixel(indexA, firstEncoderValue, secondEncoderValue, fadeVerticalCounter);
+      setPixel(indexB, firstEncoderValue, secondEncoderValue, fadeVerticalCounter);
+      
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1944,8 +1964,9 @@ void activate_pulse_one_color_all_rev() {
         if (isModeChanged == true) {
           return;
         }
-        leds[i] = CHSV(firstEncoderValue, pulseOneColorAllRevCounter, 255);
+        setPixel(i, firstEncoderValue, pulseOneColorAllRevCounter);
       }
+
       FastLED.show();  
       hasMillisTimer = true;
       millisTimer = millis();
@@ -1983,8 +2004,9 @@ void FadeInOut() {
         fadeInOutCounter -= 1;
       }
       for (int i = 0; i < LED_COUNT; i++ ) {
-        leds[i] = CHSV(firstEncoderValue, secondEncoderValue, fadeInOutCounter);
+        setPixel(i, firstEncoderValue, secondEncoderValue, fadeInOutCounter);
       }
+      
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
