@@ -499,12 +499,14 @@ void moved2() {
         modeNumber += 1;
       }
       oldModeNumber = newModeNumber;
+      isSomethingChanged == true;
       isModeChanged = true;
   } else if (newModeNumber + 4 < oldModeNumber) {
       if (modeNumber > 0) {
         modeNumber -= 1;
       }
       oldModeNumber = newModeNumber;
+      isSomethingChanged == true;
       isModeChanged = true;
     }
   }
@@ -1013,15 +1015,19 @@ unsigned long millisTimer;
 //  }
 //}
 
+void checkUpdates() {
+  decoder.update();
+  decoder2.update();
+  if (isSomethingChanged == true) {
+    changeSomethingAndSendItToDisplay();
+  }
+}
+
 // соединить isSomethingChanged и isModeChanged
 void Sparkle() {
   int index;
   while (true) {
-    if (isSomethingChanged == true) {
-      decoder.update();
-      decoder2.update();
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1049,11 +1055,7 @@ void activate_rainbow_vertical() {
   int index = 0;
   int ihue = 0;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1084,11 +1086,7 @@ void activate_rainbow_vertical() {
 void activate_new_rainbow_loop() { 
   int raindowIhue = 0;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1121,11 +1119,7 @@ void theaterChaseRainbow() {
   int index = 0;
   int indexColour = 0;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1184,11 +1178,7 @@ void theaterChaseRainbow() {
 
 void activate_random_march() {
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1216,11 +1206,7 @@ void activate_random_burst() {
   int ihue = 0;
   int index = 0;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1244,11 +1230,7 @@ void activate_rwb_march() {
   int index = 0;
   int indexOfColoredDiod;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1305,11 +1287,7 @@ void activate_rgb_propeller() {
     colorParam = firstEncoderValue;
   }
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1375,11 +1353,7 @@ void activate_ems_lightsONE() {
     firstColorParam = firstEncoderValue;
   }
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1450,11 +1424,7 @@ void activate_matrix() {
   int firstColorParam;
   int secondColorParam;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1507,16 +1477,11 @@ void CylonBounce() {
   int firstColorParam;
   int secondColorParam;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
     if (hasMillisTimer == false) {
-      
       if (index == 0) {
         cylonBounceDirectionForward = true;
         if (isInRandomMode == true) {
@@ -1567,11 +1532,7 @@ void twoDiodsGroup() {
   int firstColorParam;
   int secondColorParam;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1637,11 +1598,7 @@ void theaterChase() {
   int firstColorParam;
   int secondColorParam;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1711,11 +1668,7 @@ void meteorRain() {
   int firstColorParam;
   int secondColorParam;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1783,11 +1736,7 @@ void meteorRain() {
 void RunningLights() {
   int Position = 0;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1815,11 +1764,7 @@ void colorWipe() {
   int index = 0;
   bool isStartToLightUp = true;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1854,11 +1799,7 @@ void activate_sin_bright_wave() {
   int index = 0;
   float tcount = 0.0;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1889,11 +1830,7 @@ void activate_fade_vertical() {
   int fadeVerticalCounter = 0;
   int index = 0;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1928,11 +1865,7 @@ void activate_pulse_one_color_all_rev() {
   int pulseOneColorAllRevCounter = 0;
   bool isBounceDirectonForward = true;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
@@ -1977,11 +1910,7 @@ void FadeInOut() {
   int fadeInOutCounter = 0;
   bool fadeInOutLightsUp;
   while (true) {
-    decoder.update();
-    decoder2.update();
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
+    checkUpdates();
     if (isModeChanged == true) {
       return;
     }
