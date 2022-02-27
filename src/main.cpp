@@ -12,8 +12,8 @@ rotaryDecoder decoder2(0x24);
 
 volatile int newModeNumber = 0;
 volatile int oldModeNumber = 0;
-volatile int modeNumber = 15;
-int currentModeNumber = 15;
+volatile int modeNumber = 20;
+int currentModeNumber = 20;
 
 volatile int newSecondEncoderValue = 0;
 volatile int oldSecondEncoderValue = 0;
@@ -98,6 +98,7 @@ void TCA9548A(uint8_t bus)
 #define MODE_activate_fade_vertical 18
 #define MODE_activate_pulse_one_color_all_rev 19
 #define MODE_FadeInOut 20
+#define MODE_activate_custom_rgb_light 21
 
 #define RIGHT_DIRECTION 0
 #define LEFT_DIRECTION 1
@@ -227,6 +228,8 @@ bool isFifthDisplayManageCurrentFifthDisplayMode(int fifthDisplayModeNumber) {
     case 0: return true;
     case 1: return false;
     }
+  default: 
+    return false;
   }
 }
 
@@ -254,6 +257,7 @@ bool isThisModeHasDirectionAndRandomOrSetMode() {
   case 18: return true;
   case 19: return false;
   case 20: return false;
+  default: return false;
   }
 }
 
@@ -317,7 +321,6 @@ bool isThisDisplayManageCurrentMode(int displayNumber) {
     case 1: return false;
     case 2: return false;
     case 3: return false;
-    case 5: return false;
     default: return true;
     }
   case 8:
@@ -405,6 +408,15 @@ bool isThisDisplayManageCurrentMode(int displayNumber) {
     {
     case 0: return false;
     case 2: return false;
+    default: return true;
+    }
+  case 21:
+    switch (displayNumber)
+    {
+    case 0: return false;
+    case 2: return false;
+    case 4: return false;
+    case 5: return false;
     default: return true;
     }
   default:
@@ -499,14 +511,14 @@ void moved2() {
         modeNumber += 1;
       }
       oldModeNumber = newModeNumber;
-      isSomethingChanged == true;
+      isSomethingChanged = true;
       isModeChanged = true;
   } else if (newModeNumber + 4 < oldModeNumber) {
       if (modeNumber > 0) {
         modeNumber -= 1;
       }
       oldModeNumber = newModeNumber;
-      isSomethingChanged == true;
+      isSomethingChanged = true;
       isModeChanged = true;
     }
   }
@@ -529,7 +541,6 @@ void moved2() {
   }
 
   if (isThisDisplayManageCurrentMode(5)) {
- 
     newThirdEncoderValue = decoder2.getValue(2);
     if (newThirdEncoderValue > oldThirdEncoderValue + 4) {
       if (thirdEncoderValue < 245) {
@@ -1209,9 +1220,9 @@ void activate_rwb_march() {
       if (index > 2) {
         index = 0;
       }
-      if (isEffectDirectionForward == true) {
+      if (isDirectionRight == true) {
         indexOfColoredDiod = 0;
-      } else if (isEffectDirectionForward == false) {
+      } else if (isDirectionLeft == true) {
         indexOfColoredDiod = LED_COUNT - 1;
       }
       switch (index) {
@@ -1231,9 +1242,9 @@ void activate_rwb_march() {
           leds[indexOfColoredDiod].b = 255;
           break;
       }
-      if (isEffectDirectionForward == true) {
+      if (isDirectionRight == true) {
         moveAlightLeds(RIGHT_DIRECTION);
-      } else if (isEffectDirectionForward == false) {
+      } else if (isDirectionLeft == true) {
         moveAlightLeds(LEFT_DIRECTION);
       }
 
@@ -1276,9 +1287,9 @@ void activate_rgb_propeller() {
         int j0 = (index + i + LED_COUNT - N12) % LED_COUNT;
         int j1 = (j0 + N3) % LED_COUNT;
         int j2 = (j1 + N3) % LED_COUNT;
-        leds[j0] = CHSV(firstColorParam, secondColorParam, 255);
-        leds[j1] = CHSV(ghue, secondColorParam, 255);
-        leds[j2] = CHSV(bhue, secondColorParam, 255);
+        setPixel(j0, firstColorParam, secondColorParam);
+        setPixel(j1, ghue, secondColorParam);
+        setPixel(j2, bhue, secondColorParam);
       }
 
       FastLED.show();
@@ -1874,89 +1885,29 @@ void FadeInOut() {
 
 void activate_custom_rgb_light() {
   // полностью переписать функцию
-  int green_led = 0;
-  int red_led = 0;
-  int blue_led = 0;
-
+  bool isChanging = true;
   while (true)
   {
-    
-    if (isSomethingChanged == true) {
-      changeSomethingAndSendItToDisplay();
-    }
     if (isModeChanged == true) {
       return;
     }
-  
-  
-
-    //btn[1].tick();                      
-    //btn[2].tick();                      
-    //btn[0].tick();                      
-
-    // =============== ЭНКОДЕР ===============
-
-    // красный цвет, энкодер 1
-    //if (btn[1].left()) {
-    //  if (green_led > 0) {
-    //    green_led-=10;     // поворот налево
-    //  }
-    //}
-    //if (btn[1].right()){
-    //  if (green_led < 255) {
-    //    green_led+=10;   // поворот направо
-    //  }
-    //}
-    //if (btn[1].leftH()) {
-    //  if (green_led >= 10) {
-    //    green_led-=10;     // поворот налево
-    //  }
-    //}
-    //if (btn[1].rightH()){
-    //  if (green_led <= 245) {
-    //    green_led+=10;   // поворот направо
-    //  }
-    //}
-  //
-//
-//
-    //// зелёный цвет, энкодер 2
-    //if (btn[2].left()) {
-    //  if (red_led > 0) {
-    //    red_led-=10;     // поворот налево
-    //  }
-    //}
-    //if (btn[2].right()){
-    //  if (red_led < 255) {
-    //    red_led+=10;   // поворот направо
-    //  }
-    //}
-    //if (btn[2].leftH()) {
-    //  if (red_led >= 10) {
-    //    red_led-=10;     // поворот налево
-    //  }
-    //}
-    //if (btn[2].rightH()){
-    //  if (red_led <= 245) {
-    //    red_led+=10;   // поворот направо
-    //  }
-    //}
-//
-    //if (btn[1].turn() || btn[1].turnH() || btn[2].turn() || btn[2].turnH()) {
-      Serial.println("red:");
-      Serial.println(green_led);
-      Serial.println("green:");
-      Serial.println(red_led);
-      Serial.println("blue:");
-      Serial.println(blue_led);
-      for(int one_led = 0; one_led < LED_COUNT; one_led = one_led + 1) {
-        leds[one_led] = CRGB(green_led, red_led, blue_led);
-        FastLED.show();  
+    decoder.update();
+    decoder2.update();
+    if (isSomethingChanged == true) {
+      changeSomethingAndSendItToDisplay();
+      isChanging = true;
+      firstColorParam = firstEncoderValue;
+      secondColorParam = secondEncoderValue;
+    }
+    if (isChanging == true) {
+      for (int i = 0; i < LED_COUNT - 1; i++ ) {
+        setPixel(i, firstColorParam, secondColorParam);
       }
-    
-  
+      FastLED.show();  
+      isChanging = false;
     }
   }
+}
 
 void setModeName(int modeNum) {
   switch (modeNum) {
@@ -1981,8 +1932,7 @@ void setModeName(int modeNum) {
     case 18: modeName = MODE_activate_fade_vertical; break;
     case 19: modeName = MODE_activate_pulse_one_color_all_rev; break;  
     case 20: modeName = MODE_FadeInOut; break;
-
-    case 38: activate_custom_rgb_light(); 
+    case 21: modeName = MODE_activate_custom_rgb_light; break; 
     
   }
 }
@@ -2010,11 +1960,7 @@ void changeMode(int newmode) {
     case 18: activate_fade_vertical(); break; // готово
     case 19: activate_pulse_one_color_all_rev(); break;
     case 20: FadeInOut(); break; // готово
-    case 27: 
-
-    // в некоторые режимы добавить возможность регулировать цвет первым параметром ХСВ на РГБшных энкодерах
-    case 38: activate_custom_rgb_light(); 
-    
+    case 21: activate_custom_rgb_light(); break;
   }
   
 }
