@@ -1250,15 +1250,6 @@ void activate_rwb_march() {
 
 void activate_rgb_propeller() {
   int index = 0;
-  int firstColorParam;
-  int secondColorParam;
-  if (isInRandomMode) {
-    firstColorParam = random(0, 255);
-    secondColorParam = 255;
-  } else if (isInSetMode) {
-    firstColorParam = firstEncoderValue;
-    secondColorParam = secondEncoderValue;
-  }
   while (true) {
     checkUpdates();
     if (isModeChanged == true) {
@@ -1271,22 +1262,10 @@ void activate_rgb_propeller() {
         index--;
       }
       if (index > LED_COUNT) {
-        if (isInRandomMode == true) {
-          firstColorParam = random(0, 255);
-          secondColorParam = 255;
-        } else if (isInSetMode == true) {
-          firstColorParam = firstEncoderValue;
-          secondColorParam = secondEncoderValue;
-        }
+        checkAndSetRandomOrSetMode();
         index = 0;
       } else if (index < 0) {
-        if (isInRandomMode == true) {
-          firstColorParam = random(0, 255);
-          secondColorParam = 255;
-        } else if (isInSetMode == true) {
-          firstColorParam = firstEncoderValue;
-          secondColorParam = secondEncoderValue;
-        }
+        checkAndSetRandomOrSetMode();
         index = LED_COUNT;
       }
       int ghue = (firstColorParam + 80) % 255;
@@ -1323,12 +1302,6 @@ int antipodal_index(int i) {
  
 void activate_ems_lightsONE() {
   int index = 0;
-  int firstColorParam;
-  if (isInRandomMode == true) {
-    firstColorParam = random(0, 255);
-  } else if (isInSetMode == true) {
-    firstColorParam = firstEncoderValue;
-  }
   while (true) {
     checkUpdates();
     if (isModeChanged == true) {
@@ -1339,49 +1312,40 @@ void activate_ems_lightsONE() {
         index++;
         if (index >= LED_COUNT) {
           index = 0;
-          if (isInRandomMode == true) {
-            firstColorParam = random(0, 255);
-          } else if (isInSetMode == true) {
-            firstColorParam = firstEncoderValue;
-          }
+          checkAndSetRandomOrSetMode();
         }
         int idexR = index;
         int idexB = antipodal_index(idexR);
         int thathue = (firstColorParam + 160) % 255;
         for (int i = 0; i < LED_COUNT; i++ ) {
           if (i == idexR) {
-            setPixel(i, firstColorParam, 255);
+            setPixel(i, firstColorParam, secondColorParam);
           }
           else if (i == idexB) {
-            setPixel(i, thathue, 255);
+            setPixel(i, thathue, secondColorParam);
           }
           else {
-            setPixel(i, 0, 0);            
+            setPixel(i, 0, 0, 0);            
           }
         }
       } else if (isDirectionLeft == true) {
         index--;
         if (index <= 0) {
           index = LED_COUNT -1;
-          if (isInRandomMode) {
-            firstColorParam = random(0, 255);
-          } else if (isInSetMode) {
-            firstColorParam = firstEncoderValue;
-          }
-
+          checkAndSetRandomOrSetMode();
         }
         int idexR = index;
         int idexB = antipodal_index(idexR);
         int thathue = (firstColorParam + 160) % 255;
         for (int i = LED_COUNT; i > 0; i = i - 1) {
           if (i == idexR) {
-            setPixel(i, firstColorParam, 255);
+            setPixel(i, firstColorParam, secondColorParam);
           }
           else if (i == idexB) {
-            setPixel(i, thathue, 255);
+            setPixel(i, thathue, secondColorParam);
           }
           else {
-            setPixel(i, 0, 0);            
+            setPixel(i, 0, 0, 0);            
           }
         }
       }
@@ -1398,22 +1362,13 @@ void activate_ems_lightsONE() {
 }
 
 void activate_matrix() {
-  int firstColorParam;
-  int secondColorParam;
-  int index;
   while (true) {
     checkUpdates();
     if (isModeChanged == true) {
       return;
     }
     if (hasMillisTimer == false) {
-      if (isInRandomMode == true) {
-        firstColorParam = random(0,255);
-        secondColorParam = 255;
-      } else if (isInSetMode == true) {
-        firstColorParam = firstEncoderValue;
-        secondColorParam = secondColorParam;
-      }
+      checkAndSetRandomOrSetMode();
       int rand = random(0, 100);
       if (isDirectionRight == true) {
         if (rand > 90) {
@@ -1499,8 +1454,6 @@ void CylonBounce() {
 void twoDiodsGroup() {
   int index = 0;
   bool twoDiodsGroupDirectionForward;
-  int firstColorParam;
-  int secondColorParam;
   while (true) {
     checkUpdates();
     if (isModeChanged == true) {
@@ -1510,22 +1463,10 @@ void twoDiodsGroup() {
       
       if (index == 0) {
         twoDiodsGroupDirectionForward = true;
-        if (isInRandomMode == true) {
-          firstColorParam = random(0,255);
-          secondColorParam = 255;
-        } else if (isInSetMode == true) {
-          firstColorParam = firstEncoderValue;
-          secondColorParam = secondColorParam;
-        }
+        checkAndSetRandomOrSetMode();
       } else if (index == (LED_COUNT - numberOfActivatedDiods) / 2) {
         twoDiodsGroupDirectionForward = false;
-        if (isInRandomMode == true) {
-          firstColorParam = random(0,255);
-          secondColorParam = 255;
-        } else if (isInSetMode == true) {
-          firstColorParam = firstEncoderValue;
-          secondColorParam = secondColorParam;
-        }
+        checkAndSetRandomOrSetMode();
       }
 
       if (twoDiodsGroupDirectionForward == true) {
@@ -1545,8 +1486,6 @@ void twoDiodsGroup() {
       setPixel(LED_COUNT - index, firstColorParam, secondColorParam, 100);
       for (int j = 1; j <= numberOfActivatedDiods; j++) {
         setPixel(LED_COUNT - index - j, firstColorParam, secondColorParam);
-        //TODO почему тут 100?      
-        //leds[LED_COUNT - index - j] = CHSV(firstColorParam, secondColorParam, 100);
       }
       setPixel(LED_COUNT - index - numberOfActivatedDiods - 1, firstColorParam, secondColorParam, 100);
 
@@ -1596,7 +1535,7 @@ void theaterChase() {
         FastLED.show();
         for (int i = 0; i < LED_COUNT - numberOfGapsAndActivatedDiods - index; i = i + numberOfGapsAndActivatedDiods) {
           for (int j = 0; j < numberOfActivatedDiods; j = j + 1) {
-            setPixel(i + j + index, 0, 0);
+            setPixel(i + j + index, 0, 0, 0);
           } 
         }
         index += 1;
@@ -1614,7 +1553,7 @@ void theaterChase() {
         FastLED.show();
         for (int i = LED_COUNT; i > numberOfGapsAndActivatedDiods + index; i = i - numberOfGapsAndActivatedDiods) {
           for (int j = numberOfActivatedDiods; j > 0; j = j - 1) {
-            setPixel(i - j - index, 0, 0);
+            setPixel(i - j - index, 0, 0, 0);
           }
         }
         index += 1;
@@ -1635,8 +1574,6 @@ void theaterChase() {
 
 void meteorRain() {  
   int index = 0;
-  int firstColorParam;
-  int secondColorParam;
   while (true) {
     checkUpdates();
     if (isModeChanged == true) {
@@ -1647,13 +1584,7 @@ void meteorRain() {
         index += 1;
         if (index == LED_COUNT) {
           index = 0;
-          if (isInRandomMode) {
-            firstColorParam = random(0, 255);
-            secondColorParam = 255;
-          } else if (isInSetMode) {
-            firstColorParam = firstEncoderValue;
-            secondColorParam = secondEncoderValue;
-          }
+          checkAndSetRandomOrSetMode();
         }
         for(int j=0; j<LED_COUNT; j++) {
           if((random(10)>5) ) {
@@ -1670,14 +1601,7 @@ void meteorRain() {
         index -= 1;
         if (index < 0) {
           index = LED_COUNT;
-          if (isInRandomMode) {
-            firstColorParam = random(0, 255);
-            secondColorParam = 255;
-          } else if (isInSetMode) {
-            firstColorParam = firstEncoderValue;
-            secondColorParam = secondEncoderValue;
-          }
-
+          checkAndSetRandomOrSetMode();
         }
         for(int j=LED_COUNT; j > 0; j--) {
           if((random(10)>5) ) {
