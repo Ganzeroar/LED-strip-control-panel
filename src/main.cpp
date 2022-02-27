@@ -984,37 +984,6 @@ byte * Wheel(byte WheelPos) {
 bool hasMillisTimer = false;
 unsigned long millisTimer;
 
-//void Sparkle() {
-//  int index;
-//  while (true) {
-//    decoder.update();
-//    decoder2.update();
-//    if (isSomethingChanged == true) {
-//      changeSomethingAndSendItToDisplay();
-//    }
-//    if (isModeChanged == true) {
-//      return;
-//    }
-//    if (hasMillisTimer == false) {
-//      index = random(LED_COUNT);
-//      if (isInRandomMode == true) {
-//        leds[index] = CHSV(random(0,255), 255, 255);
-//      } else if (isInSetMode == true) {
-//        leds[index] = CHSV(firstEncoderValue, secondEncoderValue, 255);
-//      }
-//      FastLED.show();
-//      leds[index] = CHSV(0, 0, 0);
-//      hasMillisTimer = true;
-//      millisTimer = millis();
-//
-//    } else if (hasMillisTimer == true) {
-//      if (millis() - millisTimer > delayTime) {
-//        hasMillisTimer = false;
-//      }
-//    }
-//  }
-//}
-
 void checkUpdates() {
   decoder.update();
   decoder2.update();
@@ -1023,7 +992,19 @@ void checkUpdates() {
   }
 }
 
-// соединить isSomethingChanged и isModeChanged
+int firstColorParam;
+int secondColorParam;
+
+void checkAndSetRandomOrSetMode() {
+  if (isInRandomMode == true) {
+    firstColorParam = random(0, 255);
+    secondColorParam = 255;
+  } else if (isInSetMode == true) {
+    firstColorParam = firstEncoderValue;
+    secondColorParam = secondEncoderValue;
+  }
+}
+
 void Sparkle() {
   int index;
   while (true) {
@@ -1033,14 +1014,11 @@ void Sparkle() {
     }
     if (hasMillisTimer == false) {
       index = random(LED_COUNT);
-      if (isInRandomMode == true) {
-        setPixel(index, random(0,255), 255, 255);
-      } else if (isInSetMode == true) {
-        setPixel(index, firstEncoderValue, secondEncoderValue);
-      }
-      setPixel(index, 0, 0, 0);
-
+      checkAndSetRandomOrSetMode();
+      setPixel(index, firstColorParam, secondColorParam);
       FastLED.show();
+      setPixel(index, 0, 0, 0);
+      
       hasMillisTimer = true;
       millisTimer = millis();
     } else if (hasMillisTimer == true) {
@@ -1195,7 +1173,7 @@ void activate_random_march() {
 }
 
 void activate_random_burst() {
-  int ihue = 0;
+  int firstColorParam = 0;
   int index = 0;
   while (true) {
     checkUpdates();
@@ -1204,8 +1182,8 @@ void activate_random_burst() {
     }
     if (hasMillisTimer == false) {
       index = random(0, LED_COUNT);
-      ihue = random(0, 255);
-      setPixel(index, ihue, 255);
+      firstColorParam = random(0, 255);
+      setPixel(index, firstColorParam, 255);
       
       FastLED.show();
       hasMillisTimer = true;
@@ -1293,19 +1271,19 @@ void activate_rgb_propeller() {
         index--;
       }
       if (index > LED_COUNT) {
-        if (isInRandomMode) {
+        if (isInRandomMode == true) {
           firstColorParam = random(0, 255);
           secondColorParam = 255;
-        } else if (isInSetMode) {
+        } else if (isInSetMode == true) {
           firstColorParam = firstEncoderValue;
           secondColorParam = secondEncoderValue;
         }
         index = 0;
       } else if (index < 0) {
-        if (isInRandomMode) {
+        if (isInRandomMode == true) {
           firstColorParam = random(0, 255);
           secondColorParam = 255;
-        } else if (isInSetMode) {
+        } else if (isInSetMode == true) {
           firstColorParam = firstEncoderValue;
           secondColorParam = secondEncoderValue;
         }
@@ -1346,9 +1324,9 @@ int antipodal_index(int i) {
 void activate_ems_lightsONE() {
   int index = 0;
   int firstColorParam;
-  if (isInRandomMode) {
+  if (isInRandomMode == true) {
     firstColorParam = random(0, 255);
-  } else if (isInSetMode) {
+  } else if (isInSetMode == true) {
     firstColorParam = firstEncoderValue;
   }
   while (true) {
@@ -1361,9 +1339,9 @@ void activate_ems_lightsONE() {
         index++;
         if (index >= LED_COUNT) {
           index = 0;
-          if (isInRandomMode) {
+          if (isInRandomMode == true) {
             firstColorParam = random(0, 255);
-          } else if (isInSetMode) {
+          } else if (isInSetMode == true) {
             firstColorParam = firstEncoderValue;
           }
         }
@@ -1422,6 +1400,7 @@ void activate_ems_lightsONE() {
 void activate_matrix() {
   int firstColorParam;
   int secondColorParam;
+  int index;
   while (true) {
     checkUpdates();
     if (isModeChanged == true) {
@@ -1435,21 +1414,16 @@ void activate_matrix() {
         firstColorParam = firstEncoderValue;
         secondColorParam = secondColorParam;
       }
+      int rand = random(0, 100);
       if (isDirectionRight == true) {
-        int rand = random(0, 100);
         if (rand > 90) {
           setPixel(0, firstColorParam, secondColorParam);
         }
         else {
-          // зачем передавать диоду первые 2 параметра, если он
-          // не будет гореть? 
-          //TODO протестировать без первых двух параметров 
-          setPixel(0, firstColorParam, secondColorParam, 0);
-          //leds[0] = CHSV(firstColorParam, secondColorParam, 0);
+          setPixel(0, 0, 0, 0);
         }
         moveAlightLeds(RIGHT_DIRECTION);
       } else if (isDirectionLeft == true) {
-        int rand = random(0, 100);
         if (rand > 90) {
           setPixel(LED_COUNT - 1, firstColorParam, secondColorParam);
         }
@@ -1486,21 +1460,18 @@ void CylonBounce() {
         if (isInRandomMode == true) {
           firstColorParam = random(0,255);
           secondColorParam = 255;
-        } else if (isInSetMode == true) {
-          firstColorParam = firstEncoderValue;
-          secondColorParam = secondColorParam;
-        }
+        } 
       } else if (index == LED_COUNT - numberOfActivatedDiods - 2) {
         cylonBounceDirectionForward = false;
         if (isInRandomMode == true) {
           firstColorParam = random(0,255);
           secondColorParam = 255;
-        } else if (isInSetMode == true) {
-          firstColorParam = firstEncoderValue;
-          secondColorParam = secondColorParam;
-        }
+        } 
       }
-
+      if (isInSetMode == true) {
+        firstColorParam = firstEncoderValue;
+        secondColorParam = secondColorParam;
+      }
       if (cylonBounceDirectionForward == true) {
         index += 1;
       } else if (cylonBounceDirectionForward == false) {
