@@ -1433,7 +1433,7 @@ void activate_ems_lightsONE() {
 }
 
 void activate_matrix() {
-  int mainColorParam;
+  int firstColorParam;
   int secondColorParam;
   while (true) {
     decoder.update();
@@ -1446,19 +1446,19 @@ void activate_matrix() {
     }
     if (hasMillisTimer == false) {
       if (isInRandomMode == true) {
-        mainColorParam = random(0,255);
+        firstColorParam = random(0,255);
         secondColorParam = 255;
       } else if (isInSetMode == true) {
-        mainColorParam = firstEncoderValue;
+        firstColorParam = firstEncoderValue;
         secondColorParam = secondColorParam;
       }
       if (isDirectionRight == true) {
         int rand = random(0, 100);
         if (rand > 90) {
-          leds[0] = CHSV(mainColorParam, secondColorParam, 255);
+          leds[0] = CHSV(firstColorParam, secondColorParam, 255);
         }
         else {
-          leds[0] = CHSV(mainColorParam, secondColorParam, 0);
+          leds[0] = CHSV(firstColorParam, secondColorParam, 0);
         }
         for (int i = LED_COUNT-1; i > 0 ; i-- ) {
           leds[i].r = leds[i - 1].r;
@@ -1468,10 +1468,10 @@ void activate_matrix() {
       } else if (isDirectionLeft == true) {
         int rand = random(0, 100);
         if (rand > 90) {
-          leds[LED_COUNT-1] = CHSV(mainColorParam, secondColorParam, 255);
+          leds[LED_COUNT-1] = CHSV(firstColorParam, secondColorParam, 255);
         }
         else {
-          leds[LED_COUNT-1] = CHSV(mainColorParam, secondColorParam, 0);
+          leds[LED_COUNT-1] = CHSV(firstColorParam, secondColorParam, 0);
         }
         for (int i = 0; i < LED_COUNT ; i++ ) {
           leds[i].r = leds[i + 1].r;
@@ -1493,7 +1493,7 @@ void activate_matrix() {
 void CylonBounce() {  
   int index = 0;
   bool cylonBounceDirectionForward;
-  int mainColorParam;
+  int firstColorParam;
   int secondColorParam;
   while (true) {
     decoder.update();
@@ -1509,19 +1509,19 @@ void CylonBounce() {
       if (index == 0) {
         cylonBounceDirectionForward = true;
         if (isInRandomMode == true) {
-          mainColorParam = random(0,255);
+          firstColorParam = random(0,255);
           secondColorParam = 255;
         } else if (isInSetMode == true) {
-          mainColorParam = firstEncoderValue;
+          firstColorParam = firstEncoderValue;
           secondColorParam = secondColorParam;
         }
       } else if (index == LED_COUNT - numberOfActivatedDiods - 2) {
         cylonBounceDirectionForward = false;
         if (isInRandomMode == true) {
-          mainColorParam = random(0,255);
+          firstColorParam = random(0,255);
           secondColorParam = 255;
         } else if (isInSetMode == true) {
-          mainColorParam = firstEncoderValue;
+          firstColorParam = firstEncoderValue;
           secondColorParam = secondColorParam;
         }
       }
@@ -1533,11 +1533,11 @@ void CylonBounce() {
       }
 
       setAll(0, 0, 0);
-      leds[index] = CHSV(mainColorParam, secondColorParam, 100);
+      leds[index] = CHSV(firstColorParam, secondColorParam, 100);
       for (int j = 1; j <= numberOfActivatedDiods; j++) {      
-        leds[index + j] = CHSV(mainColorParam, secondColorParam, 255);
+        leds[index + j] = CHSV(firstColorParam, secondColorParam, 255);
       }
-      leds[index + numberOfActivatedDiods + 1] = CHSV(mainColorParam, secondColorParam, 100);
+      leds[index + numberOfActivatedDiods + 1] = CHSV(firstColorParam, secondColorParam, 100);
       FastLED.show();
 
       hasMillisTimer = true;
@@ -1553,7 +1553,7 @@ void CylonBounce() {
 void twoDiodsGroup() {
   int index = 0;
   bool twoDiodsGroupDirectionForward;
-  int mainColorParam;
+  int firstColorParam;
   int secondColorParam;
   while (true) {
     decoder.update();
@@ -1569,19 +1569,19 @@ void twoDiodsGroup() {
       if (index == 0) {
         twoDiodsGroupDirectionForward = true;
         if (isInRandomMode == true) {
-          mainColorParam = random(0,255);
+          firstColorParam = random(0,255);
           secondColorParam = 255;
         } else if (isInSetMode == true) {
-          mainColorParam = firstEncoderValue;
+          firstColorParam = firstEncoderValue;
           secondColorParam = secondColorParam;
         }
       } else if (index == (LED_COUNT - numberOfActivatedDiods) / 2) {
         twoDiodsGroupDirectionForward = false;
         if (isInRandomMode == true) {
-          mainColorParam = random(0,255);
+          firstColorParam = random(0,255);
           secondColorParam = 255;
         } else if (isInSetMode == true) {
-          mainColorParam = firstEncoderValue;
+          firstColorParam = firstEncoderValue;
           secondColorParam = secondColorParam;
         }
       }
@@ -1594,17 +1594,17 @@ void twoDiodsGroup() {
 
       setAll(0, 0, 0);
 
-      leds[index] = CHSV(mainColorParam, secondColorParam, 100);
+      leds[index] = CHSV(firstColorParam, secondColorParam, 100);
       for (int j = 1; j <= numberOfActivatedDiods; j++) {
-        leds[index + j] = CHSV(mainColorParam, secondColorParam, 255);
+        leds[index + j] = CHSV(firstColorParam, secondColorParam, 255);
       }
-      leds[index + numberOfActivatedDiods + 1] = CHSV(mainColorParam, secondColorParam, 100);
+      leds[index + numberOfActivatedDiods + 1] = CHSV(firstColorParam, secondColorParam, 100);
 
-      leds[LED_COUNT - index] = CHSV(mainColorParam, secondColorParam, 100);
+      leds[LED_COUNT - index] = CHSV(firstColorParam, secondColorParam, 100);
       for (int j = 1; j <= numberOfActivatedDiods; j++) {
-        leds[LED_COUNT - index - j] = CHSV(mainColorParam, secondColorParam, 100);
+        leds[LED_COUNT - index - j] = CHSV(firstColorParam, secondColorParam, 100);
       }
-      leds[LED_COUNT - index - numberOfActivatedDiods - 1] = CHSV(mainColorParam, secondColorParam, 100);
+      leds[LED_COUNT - index - numberOfActivatedDiods - 1] = CHSV(firstColorParam, secondColorParam, 100);
 
       FastLED.show();
       hasMillisTimer = true;
@@ -1621,7 +1621,7 @@ void theaterChase() {
   // переписать на подобие решения того способа что предложил Лео?
   int index = 0;
   int counterToChangeColor = 0;
-  int mainColorParam;
+  int firstColorParam;
   int secondColorParam;
   while (true) {
     decoder.update();
@@ -1637,12 +1637,12 @@ void theaterChase() {
       if (counterToChangeColor == LED_COUNT) {
         counterToChangeColor = 0;
         if (isInRandomMode == true) {
-          mainColorParam = random(0,255);
+          firstColorParam = random(0,255);
           secondColorParam = 255;
         }
       }
       if (isInSetMode == true) {
-        mainColorParam = firstEncoderValue;
+        firstColorParam = firstEncoderValue;
         secondColorParam = secondColorParam;
       }
       if (isDirectionRight == true) {
@@ -1650,7 +1650,7 @@ void theaterChase() {
 
         for (int i = 0; i < LED_COUNT - numberOfGapsAndActivatedDiods - index; i = i + numberOfGapsAndActivatedDiods) {  
           for (int j = 0; j < numberOfActivatedDiods; j = j + 1) {
-            leds[i + j + index] = CHSV(mainColorParam, secondColorParam, 255);
+            leds[i + j + index] = CHSV(firstColorParam, secondColorParam, 255);
           }
         }
         FastLED.show();
@@ -1668,7 +1668,7 @@ void theaterChase() {
 
         for (int i = LED_COUNT; i > numberOfGapsAndActivatedDiods + index; i = i - numberOfGapsAndActivatedDiods) {
           for (int j = numberOfActivatedDiods; j > 0; j = j - 1) {
-            leds[i - j - index] = CHSV(mainColorParam, secondColorParam, 255);
+            leds[i - j - index] = CHSV(firstColorParam, secondColorParam, 255);
           }
         }
         FastLED.show();
@@ -1694,7 +1694,7 @@ void theaterChase() {
 
 void meteorRain() {  
   int index = 0;
-  int mainColorParam;
+  int firstColorParam;
   int secondColorParam;
   while (true) {
     decoder.update();
@@ -1711,10 +1711,10 @@ void meteorRain() {
         if (index == LED_COUNT) {
           index = 0;
           if (isInRandomMode) {
-            mainColorParam = random(0, 255);
+            firstColorParam = random(0, 255);
             secondColorParam = 255;
           } else if (isInSetMode) {
-            mainColorParam = firstEncoderValue;
+            firstColorParam = firstEncoderValue;
             secondColorParam = secondEncoderValue;
           }
         }
@@ -1725,7 +1725,7 @@ void meteorRain() {
         }
         for(int j = 0; j < numberOfActivatedDiods; j++) {
           if( (index-j <LED_COUNT) && (index-j>=0) ) {
-            leds[index-j] = CHSV(mainColorParam, secondColorParam, 255);
+            leds[index-j] = CHSV(firstColorParam, secondColorParam, 255);
           }
         }
         
@@ -1734,10 +1734,10 @@ void meteorRain() {
         if (index < 0) {
           index = LED_COUNT;
           if (isInRandomMode) {
-            mainColorParam = random(0, 255);
+            firstColorParam = random(0, 255);
             secondColorParam = 255;
           } else if (isInSetMode) {
-            mainColorParam = firstEncoderValue;
+            firstColorParam = firstEncoderValue;
             secondColorParam = secondEncoderValue;
           }
 
@@ -1749,7 +1749,7 @@ void meteorRain() {
         }
         for(int j = numberOfActivatedDiods; j > 0; j--) {
           if( (index-j < LED_COUNT) && (index-j>=0) ) {
-            leds[index-j] = CHSV(mainColorParam, secondColorParam, 255);
+            leds[index-j] = CHSV(firstColorParam, secondColorParam, 255);
           }
         }
         
