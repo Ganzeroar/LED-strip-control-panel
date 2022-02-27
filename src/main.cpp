@@ -99,6 +99,9 @@ void TCA9548A(uint8_t bus)
 #define MODE_activate_pulse_one_color_all_rev 19
 #define MODE_FadeInOut 20
 
+#define RIGHT_DIRECTION 0
+#define LEFT_DIRECTION 1
+
 int modeName;
 
 bool isFifthDisplayManageCurrentFifthDisplayMode(int fifthDisplayModeNumber) {
@@ -938,6 +941,22 @@ void setAll(byte red, byte green, byte blue) {
   FastLED.show();
 }
 
+void moveAlightLeds(int direction) {
+  if (direction == RIGHT_DIRECTION) {
+    for (int i = LED_COUNT - 1; i > 0 ; i-- ) {
+      leds[i].r = leds[i - 1].r;
+      leds[i].g = leds[i - 1].g;
+      leds[i].b = leds[i - 1].b;
+    }
+  } else if (direction == LEFT_DIRECTION) {
+    for (int i = 0; i < LED_COUNT - 1 ; i++ ) {
+      leds[i].r = leds[i + 1].r;
+      leds[i].g = leds[i + 1].g;
+      leds[i].b = leds[i + 1].b;
+    }
+  }
+}
+
 byte * Wheel(byte WheelPos) {
   static byte c[3];
 
@@ -1176,18 +1195,10 @@ void activate_random_march() {
     if (hasMillisTimer == false) {
       if (isDirectionRight == true) {
         setPixel(0, random(0, 255), 255);
-        for (int i = LED_COUNT - 1; i > 0 ; i-- ) {
-          leds[i].r = leds[i - 1].r;
-          leds[i].g = leds[i - 1].g;
-          leds[i].b = leds[i - 1].b;
-        }
+        moveAlightLeds(RIGHT_DIRECTION);
       } else if (isDirectionLeft == true) {
         setPixel(LED_COUNT - 1, random(0, 255), 255);
-        for (int i = 0; i < LED_COUNT - 1 ; i++ ) {
-          leds[i].r = leds[i + 1].r;
-          leds[i].g = leds[i + 1].g;
-          leds[i].b = leds[i + 1].b;
-        }
+        moveAlightLeds(LEFT_DIRECTION);
       }
 
       FastLED.show();
@@ -1269,17 +1280,9 @@ void activate_rwb_march() {
           break;
       }
       if (isEffectDirectionForward == true) {
-        for (int i = LED_COUNT - 1; i > 0 ; i-- ) {
-          leds[i].r = leds[i - 1].r;
-          leds[i].g = leds[i - 1].g;
-          leds[i].b = leds[i - 1].b;
-        }
+        moveAlightLeds(RIGHT_DIRECTION);
       } else if (isEffectDirectionForward == false) {
-        for (int i = 0; i < LED_COUNT - 1 ; i++ ) {
-          leds[i].r = leds[i + 1].r;
-          leds[i].g = leds[i + 1].g;
-          leds[i].b = leds[i + 1].b;
-        }
+        moveAlightLeds(LEFT_DIRECTION);
       }
 
       FastLED.show();
@@ -1475,11 +1478,7 @@ void activate_matrix() {
           setPixel(0, firstColorParam, secondColorParam, 0);
           //leds[0] = CHSV(firstColorParam, secondColorParam, 0);
         }
-        for (int i = LED_COUNT-1; i > 0 ; i-- ) {
-          leds[i].r = leds[i - 1].r;
-          leds[i].g = leds[i - 1].g;
-          leds[i].b = leds[i - 1].b;
-        }
+        moveAlightLeds(RIGHT_DIRECTION);
       } else if (isDirectionLeft == true) {
         int rand = random(0, 100);
         if (rand > 90) {
@@ -1488,11 +1487,7 @@ void activate_matrix() {
         else {
           setPixel(LED_COUNT - 1, firstColorParam, secondColorParam, 0);
         }
-        for (int i = 0; i < LED_COUNT ; i++ ) {
-          leds[i].r = leds[i + 1].r;
-          leds[i].g = leds[i + 1].g;
-          leds[i].b = leds[i + 1].b;
-        }
+        moveAlightLeds(LEFT_DIRECTION);
       }
 
       FastLED.show();
@@ -2006,7 +2001,7 @@ void FadeInOut() {
       for (int i = 0; i < LED_COUNT; i++ ) {
         setPixel(i, firstEncoderValue, secondEncoderValue, fadeInOutCounter);
       }
-      
+
       FastLED.show();
       hasMillisTimer = true;
       millisTimer = millis();
