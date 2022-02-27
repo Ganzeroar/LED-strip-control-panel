@@ -1280,11 +1280,14 @@ void activate_rwb_march() {
 
 void activate_rgb_propeller() {
   int index = 0;
-  int colorParam;
+  int firstColorParam;
+  int secondColorParam;
   if (isInRandomMode) {
-    colorParam = random(0, 255);
+    firstColorParam = random(0, 255);
+    secondColorParam = 255;
   } else if (isInSetMode) {
-    colorParam = firstEncoderValue;
+    firstColorParam = firstEncoderValue;
+    secondColorParam = secondEncoderValue;
   }
   while (true) {
     checkUpdates();
@@ -1299,30 +1302,34 @@ void activate_rgb_propeller() {
       }
       if (index > LED_COUNT) {
         if (isInRandomMode) {
-          colorParam = random(0, 255);
+          firstColorParam = random(0, 255);
+          secondColorParam = 255;
         } else if (isInSetMode) {
-          colorParam = firstEncoderValue;
+          firstColorParam = firstEncoderValue;
+          secondColorParam = secondEncoderValue;
         }
         index = 0;
       } else if (index < 0) {
         if (isInRandomMode) {
-          colorParam = random(0, 255);
+          firstColorParam = random(0, 255);
+          secondColorParam = 255;
         } else if (isInSetMode) {
-          colorParam = firstEncoderValue;
+          firstColorParam = firstEncoderValue;
+          secondColorParam = secondEncoderValue;
         }
         index = LED_COUNT;
       }
-      int ghue = (colorParam + 80) % 255;
-      int bhue = (colorParam + 160) % 255;
+      int ghue = (firstColorParam + 80) % 255;
+      int bhue = (firstColorParam + 160) % 255;
       int N3  = int(LED_COUNT / 3);
       int N12 = int(LED_COUNT / 12);
       for (int i = 0; i < N3; i++ ) {
         int j0 = (index + i + LED_COUNT - N12) % LED_COUNT;
         int j1 = (j0 + N3) % LED_COUNT;
         int j2 = (j1 + N3) % LED_COUNT;
-        leds[j0] = CHSV(colorParam, secondEncoderValue, 255);
-        leds[j1] = CHSV(ghue, secondEncoderValue, 255);
-        leds[j2] = CHSV(bhue, secondEncoderValue, 255);
+        leds[j0] = CHSV(firstColorParam, secondColorParam, 255);
+        leds[j1] = CHSV(ghue, secondColorParam, 255);
+        leds[j2] = CHSV(bhue, secondColorParam, 255);
       }
 
       FastLED.show();
@@ -1861,6 +1868,7 @@ void activate_fade_vertical() {
   }
 }
 
+//TODO убрать isSomethingChanged
 void activate_pulse_one_color_all_rev() {
   int pulseOneColorAllRevCounter = 0;
   bool isBounceDirectonForward = true;
