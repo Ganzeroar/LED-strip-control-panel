@@ -469,7 +469,7 @@ void moved()
       }
     }
   }
-
+ 
   if (isThisDisplayManageCurrentMode(0) == true) {
     newNumberOfActivatedDidos = decoder.getValue(3);
     if (newNumberOfActivatedDidos > oldNumberOfActivatedDidos + 4) {
