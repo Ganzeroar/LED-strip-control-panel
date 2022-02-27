@@ -76,33 +76,35 @@ struct CRGB leds[LED_COUNT];
 
 int TOP_INDEX = int(LED_COUNT / 2);
 
+extern uint8_t BigNumbers[];
+
 #define THIRDENCMODE_setOrRandom 0
 #define THIRDENCMODE_direction 1
 
 #define RIGHT_DIRECTION 0
 #define LEFT_DIRECTION 1
 
-#define MODE_activateSparkle 1
-#define MODE_activateRainbowVertical 2
-#define MODE_activateNewRainbowLoop 3
+#define MODE_sparkle 1
+#define MODE_rainbowVertical 2
+#define MODE_newRainbowLoop 3
 #define MODE_theaterChaseRainbow 4
-#define MODE_activateRandomMarch 5
-#define MODE_activateRandomBurst 6
-#define MODE_activateRwbMarch 7
-#define MODE_activateRgbPropeller 8
-#define MODE_activateEmsLightsOne 9
-#define MODE_activateMatrix 10
+#define MODE_randomMarch 5
+#define MODE_randomBurst 6
+#define MODE_rwbMarch 7
+#define MODE_rgbPropeller 8
+#define MODE_emsLightsOne 9
+#define MODE_matrix 10
 #define MODE_cylonBounce 11
 #define MODE_twoDiodsGroup 12
 #define MODE_theaterChase 13
 #define MODE_meteorRain 14
 #define MODE_runningLights 15
 #define MODE_colorWipe 16
-#define MODE_activateSinBrightWave 17
-#define MODE_activateFadeVertical 18
-#define MODE_activatePulseOneColorAllRev 19
+#define MODE_sinBrightWave 17
+#define MODE_fadeVertical 18
+#define MODE_pulseOneColorAllRev 19
 #define MODE_fadeInOut 20
-#define MODE_activateCustomRgbLight 21
+#define MODE_customRgbLight 21
 
 bool isFifthDisplayManageCurrentFifthDisplayMode(int fifthDisplayModeNumber) {
   switch (modeName)
@@ -232,7 +234,6 @@ bool isFifthDisplayManageCurrentFifthDisplayMode(int fifthDisplayModeNumber) {
   }
 }
 
-
 bool isThisModeHasDirectionAndRandomOrSetMode() {
   switch (modeName)
   {
@@ -259,7 +260,6 @@ bool isThisModeHasDirectionAndRandomOrSetMode() {
   default: return false;
   }
 }
-
 
 bool isThisDisplayManageCurrentMode(int displayNumber) {
   switch (modeName)
@@ -602,8 +602,6 @@ void clearDisplays() {
   }
 }
 
-extern uint8_t BigNumbers[];
-
 void sendValueToDisplay(int displayNumber, int paramValue) {
   TCA9548A(displayNumber);
   myOLED.begin();
@@ -613,19 +611,19 @@ void sendValueToDisplay(int displayNumber, int paramValue) {
   myOLED.update();
 }
 
-void changeDirectionRight() {
+void drawChangeDirectionRight() {
   myOLED.drawLine(20, 34, 40, 34);
   myOLED.drawLine(35, 39, 40, 34);
   myOLED.drawLine(35, 29, 40, 34);
 }
 
-void changeDirectionLeft() {
+void drawChangeDirectionLeft() {
   myOLED.drawLine(20, 34, 40, 34);
   myOLED.drawLine(25, 39, 20, 34);
   myOLED.drawLine(25, 29, 20, 34);
 }
 
-void changeModeToRandomMode() {
+void drawChangeModeToRandomMode() {
   myOLED.drawLine(86, 24, 86, 44);
   myOLED.drawLine(86, 24, 96, 24);
   myOLED.drawLine(96, 24, 96, 34);
@@ -638,7 +636,7 @@ void changeModeToRandomMode() {
   myOLED.drawLine(110, 24, 110, 44);
 }
 
-void changeModeToSetMode() {
+void drawChangeModeToSetMode() {
   myOLED.drawLine(96, 24, 96, 29);
   myOLED.drawLine(96, 24, 86, 24);
   myOLED.drawLine(86, 24, 86, 34);
@@ -653,7 +651,7 @@ void changeModeToSetMode() {
   myOLED.drawLine(110, 24, 110, 44);
 }
 
-void fillLeftTriangle() {
+void drawFillLeftTriangle() {
   myOLED.drawLine(20, 0, 40, 0);
   myOLED.drawLine(21, 1, 39, 1);
   myOLED.drawLine(22, 2, 38, 2);
@@ -669,7 +667,7 @@ void fillLeftTriangle() {
   myOLED.drawLine(98, 10, 108, 0);
 }
 
-void fillRightTriangle() {
+void drawFillRightTriangle() {
   myOLED.drawLine(20, 0, 30, 10);
   myOLED.drawLine(30, 10, 40, 0);
   
@@ -731,23 +729,23 @@ void fillFifthDisplay() {
 
   if (isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_setOrRandom) == true && isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_direction) == true){
     if (thirdEncoderMode == THIRDENCMODE_setOrRandom) {
-      fillRightTriangle(); 
+      drawFillRightTriangle(); 
     } else if (thirdEncoderMode == THIRDENCMODE_direction) {
-      fillLeftTriangle();
+      drawFillLeftTriangle();
     }
   } else if (isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_setOrRandom) == true && isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_direction) == false) {
     if (thirdEncoderMode == THIRDENCMODE_setOrRandom) {
-      fillRightTriangle();
+      drawFillRightTriangle();
     } else if (thirdEncoderMode == THIRDENCMODE_direction) {
       thirdEncoderMode = THIRDENCMODE_setOrRandom;
-      fillRightTriangle();
+      drawFillRightTriangle();
     }
   } else if (isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_setOrRandom) == false && isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_direction) == true) {
     if (thirdEncoderMode == THIRDENCMODE_setOrRandom) {
-      fillLeftTriangle();
+      drawFillLeftTriangle();
       thirdEncoderMode = THIRDENCMODE_direction;
     } else if (thirdEncoderMode == THIRDENCMODE_direction) {
-      fillLeftTriangle();
+      drawFillLeftTriangle();
     }
   } else if (isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_setOrRandom) == false && isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_direction) == false) {
     drawEmptyTriangle();
@@ -761,13 +759,13 @@ void fillFifthDisplay() {
   }
 
   if (isDirectionRight == true) {
-    changeDirectionRight();
+    drawChangeDirectionRight();
   } else if (isDirectionLeft == true) {
-    changeDirectionLeft();
+    drawChangeDirectionLeft();
   }
 
   if (isInSetMode == true) {
-    changeModeToSetMode();
+    drawChangeModeToSetMode();
     myOLED.update();
     if (isThisDisplayManageCurrentMode(1) == true) {
       sendValueToDisplay(1, firstEncoderValue);  
@@ -776,7 +774,7 @@ void fillFifthDisplay() {
       sendValueToDisplay(3, secondEncoderValue);  
     }
   } else if (isInRandomMode == true) {
-    changeModeToRandomMode();
+    drawChangeModeToRandomMode();
     myOLED.update();
     deactivateDisplay(1);
     deactivateDisplay(3);
@@ -946,7 +944,7 @@ void checkAndSetRandomOrSetMode() {
   }
 }
 
-void activateSparkle() {
+void sparkle() {
   int index;
   while (true) {
     checkUpdates();
@@ -970,7 +968,7 @@ void activateSparkle() {
   }
 }
 
-void activateRainbowVertical() {
+void rainbowVertical() {
   int index = 0;
   int ihue = 0;
   while (true) {
@@ -1002,7 +1000,7 @@ void activateRainbowVertical() {
   }
 }
 
-void activateNewRainbowLoop() { 
+void newRainbowLoop() { 
   int raindowIhue = 0;
   while (true) {
     checkUpdates();
@@ -1087,7 +1085,7 @@ void theaterChaseRainbow() {
   }
 }
 
-void activateRandomMarch() {
+void randomMarch() {
   while (true) {
     checkUpdates();
     if (isModeChanged == true) {
@@ -1113,7 +1111,7 @@ void activateRandomMarch() {
   }
 }
 
-void activateRandomBurst() {
+void randomBurst() {
   int firstColorParam = 0;
   int index = 0;
   while (true) {
@@ -1137,7 +1135,7 @@ void activateRandomBurst() {
   }
 }
 
-void activateRwbMarch() {
+void rwbMarch() {
   int index = 0;
   int indexOfColoredDiod;
   while (true) {
@@ -1189,7 +1187,7 @@ void activateRwbMarch() {
   }
 }
 
-void activateRgbPropeller() {
+void rgbPropeller() {
   int index = 0;
   while (true) {
     checkUpdates();
@@ -1240,8 +1238,8 @@ int antipodal_index(int i) {
   }
   return iN;
 }
- 
-void activateEmsLightsOne() {
+
+void emsLightsOne() {
   int index = 0;
   while (true) {
     checkUpdates();
@@ -1302,7 +1300,7 @@ void activateEmsLightsOne() {
   }
 }
 
-void activateMatrix() {
+void matrix() {
   while (true) {
     checkUpdates();
     if (isModeChanged == true) {
@@ -1375,6 +1373,7 @@ void cylonBounce() {
       }
 
       setAll(0, 0, 0);
+
       setPixel(index, firstColorParam, secondColorParam, 100);
       for (int j = 1; j <= numberOfActivatedDiods; j++) {
         setPixel(index + j, firstColorParam, secondColorParam);      
@@ -1401,7 +1400,6 @@ void twoDiodsGroup() {
       return;
     }
     if (hasMillisTimer == false) {
-      
       if (index == 0) {
         twoDiodsGroupDirectionForward = true;
         checkAndSetRandomOrSetMode();
@@ -1409,13 +1407,11 @@ void twoDiodsGroup() {
         twoDiodsGroupDirectionForward = false;
         checkAndSetRandomOrSetMode();
       }
-
       if (twoDiodsGroupDirectionForward == true) {
         index++;
       } else if (twoDiodsGroupDirectionForward == false) {
         index--;
       }
-
       setAll(0, 0, 0);
 
       setPixel(index, firstColorParam, secondColorParam, 100);
@@ -1442,7 +1438,6 @@ void twoDiodsGroup() {
 }
 
 void theaterChase() {
-  // переписать на подобие решения того способа что предложил Лео?
   int index = 0;
   int counterToChangeColor = 0;
   int firstColorParam;
@@ -1467,15 +1462,14 @@ void theaterChase() {
       }
       if (isDirectionRight == true) {
         int numberOfGapsAndActivatedDiods = gapsBetweenGroupsOfDiods + numberOfActivatedDiods;
-
         for (int i = 0; i < LED_COUNT - numberOfGapsAndActivatedDiods - index; i = i + numberOfGapsAndActivatedDiods) {  
-          for (int j = 0; j < numberOfActivatedDiods; j = j + 1) {
+          for (int j = 0; j < numberOfActivatedDiods; j++) {
             setPixel(i + j + index, firstColorParam, secondColorParam);
           }
         }
         FastLED.show();
         for (int i = 0; i < LED_COUNT - numberOfGapsAndActivatedDiods - index; i = i + numberOfGapsAndActivatedDiods) {
-          for (int j = 0; j < numberOfActivatedDiods; j = j + 1) {
+          for (int j = 0; j < numberOfActivatedDiods; j++) {
             setPixel(i + j + index, 0, 0, 0);
           } 
         }
@@ -1485,15 +1479,14 @@ void theaterChase() {
         }
       } else if (isDirectionLeft == true) {
         int numberOfGapsAndActivatedDiods = gapsBetweenGroupsOfDiods + numberOfActivatedDiods;
-
         for (int i = LED_COUNT; i > numberOfGapsAndActivatedDiods + index; i = i - numberOfGapsAndActivatedDiods) {
-          for (int j = numberOfActivatedDiods; j > 0; j = j - 1) {
+          for (int j = numberOfActivatedDiods; j > 0; j--) {
             setPixel(i - j - index, firstColorParam, secondColorParam);
           }
         }
         FastLED.show();
         for (int i = LED_COUNT; i > numberOfGapsAndActivatedDiods + index; i = i - numberOfGapsAndActivatedDiods) {
-          for (int j = numberOfActivatedDiods; j > 0; j = j - 1) {
+          for (int j = numberOfActivatedDiods; j > 0; j--) {
             setPixel(i - j - index, 0, 0, 0);
           }
         }
@@ -1527,13 +1520,13 @@ void meteorRain() {
           index = 0;
           checkAndSetRandomOrSetMode();
         }
-        for(int j=0; j<LED_COUNT; j++) {
-          if((random(10)>5) ) {
+        for (int j = 0; j < LED_COUNT; j++) {
+          if ((random(10)>5) ) {
             leds[j].fadeToBlackBy(100 - gapsBetweenGroupsOfDiods);
           }
         }
-        for(int j = 0; j < numberOfActivatedDiods; j++) {
-          if( (index-j <LED_COUNT) && (index-j>=0) ) {
+        for (int j = 0; j < numberOfActivatedDiods; j++) {
+          if ((index - j <LED_COUNT) && (index - j >= 0)) {
             setPixel(index - j, firstColorParam, secondColorParam);
           }
         }
@@ -1549,12 +1542,11 @@ void meteorRain() {
             leds[j].fadeToBlackBy(100 - gapsBetweenGroupsOfDiods);
           }
         }
-        for(int j = numberOfActivatedDiods; j > 0; j--) {
-          if( (index-j < LED_COUNT) && (index-j>=0) ) {
+        for (int j = numberOfActivatedDiods; j > 0; j--) {
+          if ((index - j < LED_COUNT) && (index - j >= 0)) {
             setPixel(index - j, firstColorParam, secondColorParam);
           }
         }
-        
       }
 
       FastLED.show();
@@ -1659,7 +1651,7 @@ void colorWipe() {
   }
 }
 
-void activateSinBrightWave() {
+void sinBrightWave() {
   int index = 0;
   float tcount = 0.0;
   while (true) {
@@ -1700,7 +1692,7 @@ void activateSinBrightWave() {
   }
 }
 
-void activateFadeVertical() {
+void fadeVertical() {
   int fadeVerticalCounter = 0;
   int index = 0;
   while (true) {
@@ -1736,8 +1728,8 @@ void activateFadeVertical() {
   }
 }
 
-void activatePulseOneColorAllRev() {
-  int pulseOneColorAllRevCounter = 0;
+void pulseOneColorAllRev() {
+  int pulseOneColorAllRevSecondColorParam = 0;
   bool isBounceDirectonForward = true;
   while (true) {
     checkUpdates();
@@ -1746,14 +1738,14 @@ void activatePulseOneColorAllRev() {
     }
     if (hasMillisTimer == false) {
       if (isBounceDirectonForward == true) {
-        pulseOneColorAllRevCounter++;
-        if (pulseOneColorAllRevCounter >= 255) {
+        pulseOneColorAllRevSecondColorParam++;
+        if (pulseOneColorAllRevSecondColorParam >= 255) {
           isBounceDirectonForward = false;
           }
       }
       if (isBounceDirectonForward == false) {
-        pulseOneColorAllRevCounter = pulseOneColorAllRevCounter - 1;
-        if (pulseOneColorAllRevCounter <= 1) {
+        pulseOneColorAllRevSecondColorParam = pulseOneColorAllRevSecondColorParam - 1;
+        if (pulseOneColorAllRevSecondColorParam <= 1) {
           checkAndSetRandomOrSetMode();
           isBounceDirectonForward = true;
         }
@@ -1762,7 +1754,7 @@ void activatePulseOneColorAllRev() {
         if (isModeChanged == true) {
           return;
         }
-        setPixel(i, firstColorParam, pulseOneColorAllRevCounter);
+        setPixel(i, firstColorParam, pulseOneColorAllRevSecondColorParam);
       }
 
       FastLED.show();  
@@ -1777,7 +1769,7 @@ void activatePulseOneColorAllRev() {
 }
 
 void fadeInOut() {
-  int fadeInOutCounter = 0;
+  int fadeInOutBrightness = 0;
   bool fadeInOutLightsUp;
   while (true) {
     checkUpdates();
@@ -1786,20 +1778,20 @@ void fadeInOut() {
     }
     if (hasMillisTimer == false) {
 
-      if (fadeInOutCounter == 0) {
+      if (fadeInOutBrightness == 0) {
         checkAndSetRandomOrSetMode();
         fadeInOutLightsUp = true;
-      } else if (fadeInOutCounter == 255) {
+      } else if (fadeInOutBrightness == 255) {
         fadeInOutLightsUp = false;
       }
 
       if (fadeInOutLightsUp == true) {
-        fadeInOutCounter++;
+        fadeInOutBrightness++;
       } else if (fadeInOutLightsUp == false) {
-        fadeInOutCounter--;
+        fadeInOutBrightness--;
       }
       for (int i = 0; i < LED_COUNT; i++ ) {
-        setPixel(i, firstColorParam, secondColorParam, fadeInOutCounter);
+        setPixel(i, firstColorParam, secondColorParam, fadeInOutBrightness);
       }
 
       FastLED.show();
@@ -1813,7 +1805,7 @@ void fadeInOut() {
   }
 }
 
-void activateCustomRgbLight() {
+void customRgbLight() {
   bool isChanging = true;
   while (true)
   {
@@ -1842,56 +1834,55 @@ void activateCustomRgbLight() {
 void setModeName(int modeNum) {
   switch (modeNum) {
     case 999: break;     
-    case 1: modeName = MODE_activateSparkle; break;  
-    case 2: modeName = MODE_activateRainbowVertical; break;      
-    case 3: modeName = MODE_activateNewRainbowLoop; break;
+    case 1: modeName = MODE_sparkle; break;  
+    case 2: modeName = MODE_rainbowVertical; break;      
+    case 3: modeName = MODE_newRainbowLoop; break;
     case 4: modeName = MODE_theaterChaseRainbow; break; 
-    case 5: modeName = MODE_activateRandomMarch; break;  
-    case 6: modeName = MODE_activateRandomBurst; break; 
-    case 7: modeName = MODE_activateRwbMarch; break; 
-    case 8: modeName = MODE_activateRgbPropeller; break;
-    case 9: modeName = MODE_activateEmsLightsOne; break;
-    case 10: modeName = MODE_activateMatrix; break;
+    case 5: modeName = MODE_randomMarch; break;  
+    case 6: modeName = MODE_randomBurst; break; 
+    case 7: modeName = MODE_rwbMarch; break; 
+    case 8: modeName = MODE_rgbPropeller; break;
+    case 9: modeName = MODE_emsLightsOne; break;
+    case 10: modeName = MODE_matrix; break;
     case 11: modeName = MODE_cylonBounce; break;
     case 12: modeName = MODE_twoDiodsGroup; break; 
     case 13: modeName = MODE_theaterChase; break;
     case 14: modeName = MODE_meteorRain; break;
     case 15: modeName = MODE_runningLights; break;  
     case 16: modeName = MODE_colorWipe; break;
-    case 17: modeName = MODE_activateSinBrightWave; break;
-    case 18: modeName = MODE_activateFadeVertical; break;
-    case 19: modeName = MODE_activatePulseOneColorAllRev; break;  
+    case 17: modeName = MODE_sinBrightWave; break;
+    case 18: modeName = MODE_fadeVertical; break;
+    case 19: modeName = MODE_pulseOneColorAllRev; break;  
     case 20: modeName = MODE_fadeInOut; break;
-    case 21: modeName = MODE_activateCustomRgbLight; break; 
+    case 21: modeName = MODE_customRgbLight; break; 
   }
 }
 
 void changeMode(int newmode) {
   switch (newmode) {
     case 999: break;     
-    case 1: activateSparkle(); break; 
-    case 2: activateRainbowVertical(); break;      
-    case 3: activateNewRainbowLoop(); break; 
+    case 1: sparkle(); break; 
+    case 2: rainbowVertical(); break;      
+    case 3: newRainbowLoop(); break; 
     case 4: theaterChaseRainbow(); break;
-    case 5: activateRandomMarch(); break; 
-    case 6: activateRandomBurst(); break; 
-    case 7: activateRwbMarch(); break; 
-    case 8: activateRgbPropeller(); break;  
-    case 9: activateEmsLightsOne(); break;  
-    case 10: activateMatrix(); break; 
+    case 5: randomMarch(); break; 
+    case 6: randomBurst(); break; 
+    case 7: rwbMarch(); break; 
+    case 8: rgbPropeller(); break;  
+    case 9: emsLightsOne(); break;  
+    case 10: matrix(); break; 
     case 11: cylonBounce(); break; 
     case 12: twoDiodsGroup(); break; 
     case 13: theaterChase(); break; 
     case 14: meteorRain(); break; 
     case 15: runningLights(); break; 
     case 16: colorWipe(); break; 
-    case 17: activateSinBrightWave(); break;
-    case 18: activateFadeVertical(); break; 
-    case 19: activatePulseOneColorAllRev(); break;
+    case 17: sinBrightWave(); break;
+    case 18: fadeVertical(); break; 
+    case 19: pulseOneColorAllRev(); break;
     case 20: fadeInOut(); break; 
-    case 21: activateCustomRgbLight(); break;
+    case 21: customRgbLight(); break;
   }
-  
 }
 
 void changeThirdEncMode() {
@@ -1922,48 +1913,36 @@ void setup()
   pinMode(19, INPUT_PULLUP);
   attachInterrupt(4, changeThirdEncMode, RISING);
 
-  Serial.println("1");
   Wire.begin();
   Wire.setClock(100000);
-  Serial.println("2");
   encoder.begin(4);
   encoder.readInitialState();
-  Serial.println("3");
   encoder2.begin(4);
   encoder2.readInitialState();
 
-  Serial.println("4");
-  clearDisplays();
+  setModeName(modeNumber);
 
+  enableCurrentModeDisplayControls();
+  clearDisplays();
   sendValueToDisplay(7, modeNumber);
 
   FastLED.setBrightness(brightnessValue);
   FastLED.addLeds<WS2812, LED_DT, RGB>(leds, LED_COUNT);
-  Serial.println("7");
+  
   setAll(0, 0, 0);
-  setModeName(modeNumber);
-  enableCurrentModeDisplayControls();
+  
   changeMode(modeNumber);
-
 }
 
 void loop()
 {
-  encoder.update(); // потенциально не нужно потому что уже вызывается
-  encoder2.update(); // потенциально не нужно потому что уже вызывается
-
-  if (isSomethingChanged == true) { // потенциально не нужно потому что уже вызывается
-    changeSomethingAndSendItToDisplay(); // потенциально не нужно потому что уже вызывается
-  }
-  if (isModeChanged == true) { // потенциально не нужно потому что уже вызывается
+  checkUpdates();
+  if (isModeChanged == true) {
     if (currentModeNumber != modeNumber) {
       setAll(0, 0, 0);
       currentModeNumber = modeNumber;
       sendValueToDisplay(7, modeNumber);
       setModeName(modeNumber);
-      Serial.println("loop");
-      Serial.println(modeNumber);
-      Serial.println(modeName);
       enableCurrentModeDisplayControls();
       hasMillisTimer = false;
       isModeChanged = false;
