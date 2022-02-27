@@ -1124,11 +1124,10 @@ void theaterChaseRainbow() {
       return;
     }
     if (hasMillisTimer == false) {
+      int numberOfGapsAndActivatedDiods = gapsBetweenGroupsOfDiods + numberOfActivatedDiods;
       if (isDirectionRight == true) {
-        int numberOfGapsAndActivatedDiods = gapsBetweenGroupsOfDiods + numberOfActivatedDiods;
-
         for (int i = 0; i < LED_COUNT - numberOfGapsAndActivatedDiods - index; i = i + numberOfGapsAndActivatedDiods) {  
-          c = Wheel( (i + indexColour) % 255);
+          c = Wheel((i + indexColour) % 255);
           for (int j = 0; j < numberOfActivatedDiods; j = j + 1) {
             setPixelRGB(i + j + index, *c, *(c + 1), *(c + 2));
           }
@@ -1139,16 +1138,9 @@ void theaterChaseRainbow() {
           setPixelRGB(i + j + index, 0, 0, 0);
           } 
         }
-        index += 1;
-        if (index == numberOfGapsAndActivatedDiods) {
-          index = 0;
-          indexColour += firstEncoderValue / 10;
-        }
       } else if (isDirectionLeft == true) {
-        int numberOfGapsAndActivatedDiods = gapsBetweenGroupsOfDiods + numberOfActivatedDiods;
-
         for (int i = LED_COUNT; i > numberOfGapsAndActivatedDiods + index; i = i - numberOfGapsAndActivatedDiods) {
-          c = Wheel( (i + indexColour) % 255);
+          c = Wheel((i + indexColour) % 255);
           for (int j = numberOfActivatedDiods; j > 0; j = j - 1) {
             setPixelRGB(i - j - index,  *c, *(c + 1), *(c + 2));
           }
@@ -1159,11 +1151,11 @@ void theaterChaseRainbow() {
             setPixelRGB(i - j - index,  0, 0, 0);
           }
         }
-        index += 1;
-        if (index == numberOfGapsAndActivatedDiods) {
-          index = 0;
-          indexColour += firstEncoderValue / 10;
-        }
+      }
+      index += 1;
+      if (index == numberOfGapsAndActivatedDiods) {
+        index = 0;
+        indexColour += firstEncoderValue / 10;
       }
 
       hasMillisTimer = true;
