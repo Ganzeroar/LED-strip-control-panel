@@ -387,7 +387,7 @@ bool isThisDisplayManageCurrentMode(int displayNumber) {
 
 void movedFirstPCF8574() {
   if (isThisDisplayManageCurrentMode(0) == true) {
-    newZeroEncoderValue = firstPCF8574.getValue(3);
+    newZeroEncoderValue = firstPCF8574.getValue(0);
     if (newZeroEncoderValue > oldZeroENcoderValue + 4) {
       if (numberOfActivatedDiods < 255) {
         numberOfActivatedDiods += 1;
@@ -405,7 +405,7 @@ void movedFirstPCF8574() {
 
   if (isThisDisplayManageCurrentMode(1) == true) {
     if (isInRandomMode == false) {
-      newFirstEncoderValue = firstPCF8574.getValue(2);
+      newFirstEncoderValue = firstPCF8574.getValue(1);
       if (newFirstEncoderValue > oldFirstEncoderValue + 4) {
         if (firstEncoderValue < 245) {
           firstEncoderValue += 10;
@@ -423,7 +423,7 @@ void movedFirstPCF8574() {
   }
 
   if (isThisDisplayManageCurrentMode(2) == true) {
-    newSecondEncoderValue = firstPCF8574.getValue(1);
+    newSecondEncoderValue = firstPCF8574.getValue(2);
     if (newSecondEncoderValue > oldSecondEncoderValue + 4) {
       if (gapsBetweenGroupsOfDiods < 255) {
         gapsBetweenGroupsOfDiods += 1;
@@ -441,7 +441,7 @@ void movedFirstPCF8574() {
 
   if (isThisDisplayManageCurrentMode(3) == true) {
     if (isInRandomMode == false) {
-      newThirdEncoderValue = firstPCF8574.getValue(0);
+      newThirdEncoderValue = firstPCF8574.getValue(3);
       if (newThirdEncoderValue > oldThirdEncoderValue + 4) {
         if (thirdEncoderValue < 245) {
           thirdEncoderValue += 10;
@@ -461,7 +461,7 @@ void movedFirstPCF8574() {
 
 void movedSecondPCF8574() {
   if (isThisDisplayManageCurrentMode(4)) {
-    newFourthEncoderValue = secondPCF8574.getValue(3);
+    newFourthEncoderValue = secondPCF8574.getValue(0);
     if (newFourthEncoderValue > oldFourthEncoderValue + 4) {
       if (delayTime < 255) {
         delayTime += 10;
@@ -478,7 +478,7 @@ void movedSecondPCF8574() {
   }
 
   if (isThisDisplayManageCurrentMode(5)) {
-    newFifthEncoderValue = secondPCF8574.getValue(2);
+    newFifthEncoderValue = secondPCF8574.getValue(1);
     if (newFifthEncoderValue > oldFifthEncoderValue + 4) {
       if (fifthEncoderValue < 245) {
         fifthEncoderValue += 1;
@@ -495,7 +495,7 @@ void movedSecondPCF8574() {
   }
 
   if (isThisDisplayManageCurrentMode(6)) {
-    newSixthEncoderValue = secondPCF8574.getValue(1);
+    newSixthEncoderValue = secondPCF8574.getValue(2);
     if (newSixthEncoderValue > oldSixthEncoderValue + 4) {
       if (brightnessValue < 245) {
         brightnessValue += 10;
@@ -512,7 +512,7 @@ void movedSecondPCF8574() {
   }
 
   if (isThisDisplayManageCurrentMode(7)) {
-    newSeventhEncoderValue = secondPCF8574.getValue(0);
+    newSeventhEncoderValue = secondPCF8574.getValue(3);
     if (newSeventhEncoderValue > oldSeventhEncoderValue + 4) {
       if (modeNumber < 42) {
         modeNumber += 1;
