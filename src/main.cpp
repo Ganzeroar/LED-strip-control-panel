@@ -12,8 +12,8 @@ rotaryDecoder encoder2(0x24);
 
 volatile int newModeNumber = 0;
 volatile int oldModeNumber = 0;
-volatile int modeNumber = 20;
-int currentModeNumber = 20;
+volatile int modeNumber = 12;
+int currentModeNumber = 12;
 
 volatile int newSecondEncoderValue = 0;
 volatile int oldSecondEncoderValue = 0;
@@ -107,324 +107,285 @@ extern uint8_t BigNumbers[];
 #define MODE_customRgbLight 21
 
 bool isFifthDisplayManageCurrentFifthDisplayMode(int fifthDisplayModeNumber) {
-  switch (modeName)
-  {
-  case 1:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return false;
-    }
-  case 2:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return false;
-    case 1: return false;
-    }
-  case 3:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return false;
-    case 1: return true;
-    }
-  case 4:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return false;
-    case 1: return true;
-    }
-  case 5:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return false;
-    case 1: return true;
-    }
-  case 6:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return false;
-    case 1: return false;
-    }
-  case 7:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return false;
-    case 1: return true;
-    }
-  case 8:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return true;
-    }
-  case 9:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return true;
-    }
-  case 10:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return true;
-    }
-  case 11:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return false;
-    }
-  case 12:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return false;
-    }
-  case 13:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return true;
-    }
-  case 14:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return true;
-    }
-  case 15:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return true;
-    }
-  case 16:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return true;
-    }
-  case 17:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return true;
-    }
-  case 18:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return false;
-    }
-  case 19:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return false;
-    }
-  case 20:
-    switch (fifthDisplayModeNumber)
-    {
-    case 0: return true;
-    case 1: return false;
-    }
-  default: 
-    return false;
+  switch (modeName) {
+    case 1:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return false;
+      }
+    case 2:
+      switch (fifthDisplayModeNumber) {
+        case 0: return false;
+        case 1: return false;
+      }
+    case 3:
+      switch (fifthDisplayModeNumber) {
+        case 0: return false;
+        case 1: return true;
+      }
+    case 4:
+      switch (fifthDisplayModeNumber) {
+        case 0: return false;
+        case 1: return true;
+      }
+    case 5:
+      switch (fifthDisplayModeNumber) {
+        case 0: return false;
+        case 1: return true;
+      }
+    case 6:
+      switch (fifthDisplayModeNumber) {
+        case 0: return false;
+        case 1: return false;
+      }
+    case 7:
+      switch (fifthDisplayModeNumber) {
+        case 0: return false;
+        case 1: return true;
+      }
+    case 8:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return true;
+      }
+    case 9:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return true;
+      }
+    case 10:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return true;
+      }
+    case 11:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return false;
+      }
+    case 12:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return false;
+      }
+    case 13:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return true;
+      }
+    case 14:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return true;
+      }
+    case 15:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return true;
+      }
+    case 16:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return true;
+      }
+    case 17:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return true;
+      }
+    case 18:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return false;
+      }
+    case 19:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return false;
+      }
+    case 20:
+      switch (fifthDisplayModeNumber) {
+        case 0: return true;
+        case 1: return false;
+      }
+    case 21:
+      switch (fifthDisplayModeNumber) {
+        case 0: return false;
+        case 1: return false;
+      }
+    default: 
+      return false;
   }
 }
 
 bool isThisModeHasDirectionAndRandomOrSetMode() {
-  switch (modeName)
-  {
-  case 1: return false;
-  case 2: return false;
-  case 3: return false;
-  case 4: return false;
-  case 5: return false;
-  case 6: return false;
-  case 7: return false;
-  case 8: return true;
-  case 9: return true;
-  case 10: return true;
-  case 11: return false;
-  case 12: return false;
-  case 13: return true;
-  case 14: return true;
-  case 15: return true;
-  case 16: return true;
-  case 17: return true;
-  case 18: return true;
-  case 19: return false;
-  case 20: return false;
-  default: return false;
+  switch (modeName) {
+    case 1: return false;
+    case 2: return false;
+    case 3: return false;
+    case 4: return false;
+    case 5: return false;
+    case 6: return false;
+    case 7: return false;
+    case 8: return true;
+    case 9: return true;
+    case 10: return true;
+    case 11: return false;
+    case 12: return false;
+    case 13: return true;
+    case 14: return true;
+    case 15: return true;
+    case 16: return true;
+    case 17: return true;
+    case 18: return true;
+    case 19: return false;
+    case 20: return false;
+    case 21: return false;
+    default: return false;
   }
 }
 
 bool isThisDisplayManageCurrentMode(int displayNumber) {
-  switch (modeName)
-  {
-  case 1:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 2: return false;
-    default: return true;
-    }
-  case 2:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 1: return false;
-    case 3: return false;
-    case 5: return false;
-    default: return true;
-    }
-  case 3:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 1: return false;
-    case 3: return false;
-    default: return true;
-    }
-  case 4:
-    switch (displayNumber)
-    {
-    case 3: return false;
-    default: return true;
-    }
-  case 5:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 1: return false;
-    case 2: return false;
-    case 3: return false;
-    default: return true;
-    }
-  case 6:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 1: return false;
-    case 2: return false;
-    case 3: return false;
-    case 5: return false;
-    default: return true;
-    }
-  case 7:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 1: return false;
-    case 2: return false;
-    case 3: return false;
-    default: return true;
-    }
-  case 8:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 2: return false;
-    default: return true;
-    }
-  case 9:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 2: return false;
-    case 3: return false;
-    default: return true;
-    }
-  case 10:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 2: return false;
-    default: return true;
-    }
-  case 11:
-    switch (displayNumber)
-    {
-    case 2: return false;
-    default: return true;
-    }
-  case 12:
-    switch (displayNumber)
-    {
-    case 2: return false;
-    default: return true;
-    }
-  case 13:
-    switch (displayNumber)
-    {
-    default: return true;
-    }
-  case 14:
-    switch (displayNumber)
-    {
-    default: return true;
-    }
-  case 15:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 2: return false;
-    default: return true;
-    }
-  case 16:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 2: return false;
-    default: return true;
-    }
-  case 17:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 2: return false;
-    default: return true;
-    }
-  case 18:
-    switch (displayNumber)
-    {
-    case 0:  return false;
-    case 2: return false;
-    default: return true;
-    }
-  case 19:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 2: return false;
-    case 3: return false;
-    default: return true;
-    }
-  case 20:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 2: return false;
-    default: return true;
-    }
-  case 21:
-    switch (displayNumber)
-    {
-    case 0: return false;
-    case 2: return false;
-    case 4: return false;
-    case 5: return false;
-    default: return true;
-    }
-  default:
-    return false;
+  switch (modeName) {
+    case 1:
+      switch (displayNumber) {
+        case 0: return false;
+        case 2: return false;
+        default: return true;
+      }
+    case 2:
+      switch (displayNumber) {
+        case 0: return false;
+        case 1: return false;
+        case 3: return false;
+        case 5: return false;
+        default: return true;
+      }
+    case 3:
+      switch (displayNumber) {
+        case 0: return false;
+        case 1: return false;
+        case 3: return false;
+        default: return true;
+      }
+    case 4:
+      switch (displayNumber) {
+        case 3: return false;
+        default: return true;
+      }
+    case 5:
+      switch (displayNumber) {
+        case 0: return false;
+        case 1: return false;
+        case 2: return false;
+        case 3: return false;
+        default: return true;
+      }
+    case 6:
+      switch (displayNumber) {
+        case 0: return false;
+        case 1: return false;
+        case 2: return false;
+        case 3: return false;
+        case 5: return false;
+        default: return true;
+      }
+    case 7:
+      switch (displayNumber) {
+        case 0: return false;
+        case 1: return false;
+        case 2: return false;
+        case 3: return false;
+        default: return true;
+      }
+    case 8:
+      switch (displayNumber) {
+        case 0: return false;
+        case 2: return false;
+        default: return true;
+      }
+    case 9:
+      switch (displayNumber) {
+        case 0: return false;
+        case 2: return false;
+        case 3: return false;
+        default: return true;
+      }
+    case 10:
+      switch (displayNumber) {
+        case 0: return false;
+        case 2: return false;
+        default: return true;
+      }
+    case 11:
+      switch (displayNumber) {
+        case 2: return false;
+        default: return true;
+      }
+    case 12:
+      switch (displayNumber) {
+        case 2: return false;
+        default: return true;
+      }
+    case 13:
+      switch (displayNumber) {
+        default: return true;
+      }
+    case 14:
+      switch (displayNumber) {
+        default: return true;
+      }
+    case 15:
+      switch (displayNumber) {
+        case 0: return false;
+        case 2: return false;
+        default: return true;
+      }
+    case 16:
+      switch (displayNumber) {
+        case 0: return false;
+        case 2: return false;
+        default: return true;
+      }
+    case 17:
+      switch (displayNumber) {
+        case 0: return false;
+        case 2: return false;
+        default: return true;
+      }
+    case 18:
+      switch (displayNumber) {
+        case 0:  return false;
+        case 2: return false;
+        default: return true;
+      }
+    case 19:
+      switch (displayNumber) {
+        case 0: return false;
+        case 2: return false;
+        case 3: return false;
+        default: return true;
+      }
+    case 20:
+      switch (displayNumber) {
+        case 0: return false;
+        case 2: return false;
+        default: return true;
+      }
+    case 21:
+      switch (displayNumber) {
+        case 0: return false;
+        case 2: return false;
+        case 4: return false;
+        case 5: return false;
+        default: return true;
+      }
+    default:
+      return false;
   }
 }
 
-void moved()
-{
+void moved() {
   if (isThisDisplayManageCurrentMode(3) == true) {
     if (isInRandomMode == false) {
       newSecondEncoderValue = encoder.getValue(0);
@@ -583,8 +544,7 @@ int horizontal_index(int i) {
   return LED_COUNT - i;
 }
 
-void TCA9548A(uint8_t bus)
-{
+void TCA9548A(uint8_t bus) {
   Wire.beginTransmission(0x70);
   Wire.write(1 << bus);
   Wire.endTransmission();
@@ -1070,7 +1030,7 @@ void theaterChaseRainbow() {
         }
       }
       index += 1;
-      if (index == numberOfGapsAndActivatedDiods) {
+      if (index >= numberOfGapsAndActivatedDiods) {
         index = 0;
         indexColour += firstEncoderValue / 10;
       }
@@ -1403,7 +1363,7 @@ void twoDiodsGroup() {
       if (index == 0) {
         twoDiodsGroupDirectionForward = true;
         checkAndSetRandomOrSetMode();
-      } else if (index == (LED_COUNT - numberOfActivatedDiods) / 2) {
+      } else if (index >= (LED_COUNT - numberOfActivatedDiods) / 2) {
         twoDiodsGroupDirectionForward = false;
         checkAndSetRandomOrSetMode();
       }
@@ -1537,7 +1497,7 @@ void meteorRain() {
           index = LED_COUNT;
           checkAndSetRandomOrSetMode();
         }
-        for(int j=LED_COUNT; j > 0; j--) {
+        for (int j = LED_COUNT; j > 0; j--) {
           if((random(10)>5) ) {
             leds[j].fadeToBlackBy(100 - gapsBetweenGroupsOfDiods);
           }
@@ -1573,6 +1533,10 @@ void runningLights() {
       if (runningLightsIndex == LED_COUNT) {
         runningLightsIndex = 0;
         checkAndSetRandomOrSetMode();
+      }
+      if (isInSetMode) {
+        firstColorParam = firstEncoderValue;
+        secondColorParam = secondEncoderValue;
       }
       if (isDirectionRight == true) {
         Position++;
@@ -1702,15 +1666,13 @@ void fadeVertical() {
     }
     if (hasMillisTimer == false) {
       index++;
-      if (index > TOP_INDEX)
-      {
+      if (index > TOP_INDEX) {
         index = 0;
       }
       int indexA = index;
       int indexB = horizontal_index(indexA);
       fadeVerticalCounter = fadeVerticalCounter + 10;
-      if (fadeVerticalCounter > 255)
-      {
+      if (fadeVerticalCounter > 255) {
         checkAndSetRandomOrSetMode();
         fadeVerticalCounter = 0;
       }
@@ -1777,14 +1739,12 @@ void fadeInOut() {
       return;
     }
     if (hasMillisTimer == false) {
-
       if (fadeInOutBrightness == 0) {
         checkAndSetRandomOrSetMode();
         fadeInOutLightsUp = true;
       } else if (fadeInOutBrightness == 255) {
         fadeInOutLightsUp = false;
       }
-
       if (fadeInOutLightsUp == true) {
         fadeInOutBrightness++;
       } else if (fadeInOutLightsUp == false) {
@@ -1899,8 +1859,7 @@ void changeThirdEncMode() {
   }
 } 
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
   Serial.println("system start");
 
@@ -1922,8 +1881,8 @@ void setup()
 
   setModeName(modeNumber);
 
-  enableCurrentModeDisplayControls();
   clearDisplays();
+  enableCurrentModeDisplayControls();
   sendValueToDisplay(7, modeNumber);
 
   FastLED.setBrightness(brightnessValue);
@@ -1934,8 +1893,7 @@ void setup()
   changeMode(modeNumber);
 }
 
-void loop()
-{
+void loop() {
   checkUpdates();
   if (isModeChanged == true) {
     if (currentModeNumber != modeNumber) {
