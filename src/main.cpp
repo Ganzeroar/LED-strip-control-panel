@@ -106,6 +106,22 @@ extern uint8_t BigNumbers[];
 #define MODE_fadeInOut 20
 #define MODE_customRgbLight 21
 
+// not used
+#define ZERO_ENCODER_BUTTON_PIN 31
+#define SECOND_ENCODER_BUTTON_PIN 35
+#define SEVENTH_ENCODER_BUTTON_PIN 44
+// used
+#define FIRST_ENCODER_BUTTON_PIN 33
+#define THIRD_ENCODER_BUTTON_PIN 37
+#define FOURTH_ENCODER_BUTTON_PIN 40
+#define FIFTH_ENCODER_BUTTON_PIN 19
+#define SIXTH_ENCODER_BUTTON_PIN 42
+
+
+#define FIRST_PCF8574_PIN 2
+#define SECOND_PCF8574_PIN 3
+
+
 bool isFifthDisplayManageCurrentFifthDisplayMode(int fifthDisplayModeNumber) {
   switch (modeName) {
     case 1:
@@ -407,14 +423,30 @@ void movedFirstPCF8574() {
     if (isInRandomMode == false) {
       newFirstEncoderValue = firstPCF8574.getValue(1);
       if (newFirstEncoderValue > oldFirstEncoderValue + 4) {
-        if (firstEncoderValue < 245) {
-          firstEncoderValue += 10;
+        if (digitalRead(FIRST_ENCODER_BUTTON_PIN) == LOW) {
+          if (firstEncoderValue < 255) {
+            firstEncoderValue += 1;
+          }
+        } else if (digitalRead(FIRST_ENCODER_BUTTON_PIN) == HIGH) {
+          if (firstEncoderValue < 245) {
+            firstEncoderValue += 10;
+          } else if (245 <= firstEncoderValue && firstEncoderValue < 255) {
+            firstEncoderValue = 255;
+          }
         }
         oldFirstEncoderValue = newFirstEncoderValue;
         isSomethingChanged = true;
       } else if (newFirstEncoderValue + 4 < oldFirstEncoderValue) {
-        if (firstEncoderValue > 0) {
-          firstEncoderValue -= 10;
+        if (digitalRead(FIRST_ENCODER_BUTTON_PIN) == LOW) {
+          if (firstEncoderValue > 0) {
+            firstEncoderValue -= 1;
+          }
+        } else if (digitalRead(FIRST_ENCODER_BUTTON_PIN) == HIGH) {
+          if (firstEncoderValue > 10) {
+            firstEncoderValue -= 10;
+          } else if (0 < firstEncoderValue && firstEncoderValue <= 10) {
+            firstEncoderValue = 0;
+          }
         }
         oldFirstEncoderValue = newFirstEncoderValue;
         isSomethingChanged = true;
@@ -443,14 +475,30 @@ void movedFirstPCF8574() {
     if (isInRandomMode == false) {
       newThirdEncoderValue = firstPCF8574.getValue(3);
       if (newThirdEncoderValue > oldThirdEncoderValue + 4) {
-        if (thirdEncoderValue < 245) {
-          thirdEncoderValue += 10;
+        if (digitalRead(THIRD_ENCODER_BUTTON_PIN) == LOW) {
+          if (thirdEncoderValue < 255) {
+            thirdEncoderValue += 1;
+          }
+        } else if (digitalRead(THIRD_ENCODER_BUTTON_PIN) == HIGH) {
+          if (thirdEncoderValue < 245) {
+            thirdEncoderValue += 10;
+          } else if (245 <= thirdEncoderValue && thirdEncoderValue < 255) {
+            thirdEncoderValue = 255;
+          }
         }
         oldThirdEncoderValue = newThirdEncoderValue;
         isSomethingChanged = true;
       } else if (newThirdEncoderValue + 4 < oldThirdEncoderValue) {
-        if (thirdEncoderValue > 0) {
-          thirdEncoderValue -= 10;
+        if (digitalRead(THIRD_ENCODER_BUTTON_PIN) == LOW) {
+          if (thirdEncoderValue > 0) {
+            thirdEncoderValue -= 1;
+          }
+        } else if (digitalRead(THIRD_ENCODER_BUTTON_PIN) == HIGH) {
+          if (thirdEncoderValue > 10) {
+            thirdEncoderValue -= 10;
+          } else if (0 < thirdEncoderValue && thirdEncoderValue <= 10) {
+            thirdEncoderValue = 0;
+          }
         }
         oldThirdEncoderValue = newThirdEncoderValue;
         isSomethingChanged = true;
@@ -463,14 +511,30 @@ void movedSecondPCF8574() {
   if (isThisDisplayManageCurrentMode(4)) {
     newFourthEncoderValue = secondPCF8574.getValue(0);
     if (newFourthEncoderValue > oldFourthEncoderValue + 4) {
-      if (delayTime < 255) {
-        delayTime += 10;
+      if (digitalRead(FOURTH_ENCODER_BUTTON_PIN) == LOW) {
+        if (delayTime < 255) {
+          delayTime += 1;
+        }
+      } else if (digitalRead(FOURTH_ENCODER_BUTTON_PIN) == HIGH) {
+        if (delayTime < 245) {
+          delayTime += 10;
+        } else if (245 <= delayTime && delayTime < 255) {
+          delayTime = 255;
+        }
       }
       oldFourthEncoderValue = newFourthEncoderValue;
       isSomethingChanged = true;
     } else if (newFourthEncoderValue + 4 < oldFourthEncoderValue) {
-      if (delayTime > 0) {
-        delayTime -= 10;
+      if (digitalRead(FOURTH_ENCODER_BUTTON_PIN) == LOW) {
+        if (delayTime > 0) {
+          delayTime -= 1;
+        }
+      } else if (digitalRead(FOURTH_ENCODER_BUTTON_PIN) == HIGH) {
+        if (delayTime > 10) {
+          delayTime -= 10;
+        } else if (0 < delayTime && delayTime <= 10) {
+          delayTime = 0;
+        }
       }
       oldFourthEncoderValue = newFourthEncoderValue;
       isSomethingChanged = true;
@@ -497,14 +561,30 @@ void movedSecondPCF8574() {
   if (isThisDisplayManageCurrentMode(6)) {
     newSixthEncoderValue = secondPCF8574.getValue(2);
     if (newSixthEncoderValue > oldSixthEncoderValue + 4) {
-      if (brightnessValue < 245) {
-        brightnessValue += 10;
+      if (digitalRead(SIXTH_ENCODER_BUTTON_PIN) == LOW) {
+        if (brightnessValue < 255) {
+          brightnessValue += 1;
+        }
+      } else if (digitalRead(SIXTH_ENCODER_BUTTON_PIN) == HIGH) {
+        if (brightnessValue < 245) {
+          brightnessValue += 10;
+        } else if (245 <= brightnessValue && brightnessValue < 255) {
+          brightnessValue = 255;
+        }
       }
       oldSixthEncoderValue = newSixthEncoderValue;
       isSomethingChanged = true;
     } else if (newSixthEncoderValue + 4 < oldSixthEncoderValue) {
-      if (brightnessValue > 0) {
-        brightnessValue -= 10;
+      if (digitalRead(SIXTH_ENCODER_BUTTON_PIN) == LOW) {
+        if (brightnessValue > 0) {
+          brightnessValue -= 1;
+        }
+      } else if (digitalRead(SIXTH_ENCODER_BUTTON_PIN) == HIGH) {
+        if (brightnessValue > 10) {
+          brightnessValue -= 10;
+        } else if (0 < brightnessValue && brightnessValue <= 10) {
+          brightnessValue = 0;
+        }
       }
       oldSixthEncoderValue = newSixthEncoderValue;
       isSomethingChanged = true;
@@ -1858,14 +1938,19 @@ void setup() {
   Serial.begin(115200);
   Serial.println("system start");
 
-  pinMode(2, INPUT_PULLUP);
+  pinMode(FIRST_PCF8574_PIN, INPUT_PULLUP);
   attachInterrupt(0, movedFirstPCF8574, FALLING);
 
-  pinMode(3, INPUT_PULLUP);
+  pinMode(SECOND_PCF8574_PIN, INPUT_PULLUP);
   attachInterrupt(1, movedSecondPCF8574, FALLING);
 
-  pinMode(19, INPUT_PULLUP);
+  pinMode(FIFTH_ENCODER_BUTTON_PIN, INPUT_PULLUP);
   attachInterrupt(4, changeThirdEncMode, RISING);
+
+  pinMode(FIRST_ENCODER_BUTTON_PIN, INPUT_PULLUP);
+  pinMode(THIRD_ENCODER_BUTTON_PIN, INPUT_PULLUP);
+  pinMode(FOURTH_ENCODER_BUTTON_PIN, INPUT_PULLUP);
+  pinMode(SIXTH_ENCODER_BUTTON_PIN, INPUT_PULLUP);
 
   Wire.begin();
   Wire.setClock(100000);
