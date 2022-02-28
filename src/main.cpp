@@ -5,52 +5,52 @@
 #include "rotaryDecoder.h"
 #include <OLED_I2C.h>
 
-OLED  myOLED(SDA, SCL, 8);
+OLED myOLED(SDA, SCL, 8);
 
-rotaryDecoder encoder(0x20);
-rotaryDecoder encoder2(0x24);
+rotaryDecoder firstPCF8574(0x20);
+rotaryDecoder secondPCF8574(0x24);
 
-volatile int newModeNumber = 0;
-volatile int oldModeNumber = 0;
-volatile int modeNumber = 12;
-int currentModeNumber = 12;
-
-volatile int newSecondEncoderValue = 0;
-volatile int oldSecondEncoderValue = 0;
-volatile uint8_t secondEncoderValue = 200;
-int currentSecondEncoderValue = 200;
-
-volatile int newNumberOfActivatedDidos = 0;
-volatile int oldNumberOfActivatedDidos = 0;
+volatile int newZeroEncoderValue = 0;
+volatile int oldZeroENcoderValue = 0;
 volatile int numberOfActivatedDiods = 1;
 int currentNumberOfActivatedDidos = 1;
-
-volatile int newGapsBetweenGroupsOfDiods = 0;
-volatile int oldGapsBetweenGroupsOfDiods = 0;
-volatile uint8_t gapsBetweenGroupsOfDiods = 3;
-int currentGapsBetweenGroupsOfDiods = 3;
-
-volatile int newDelayTime = 0;
-volatile int oldDelayTime = 0;
-volatile unsigned long delayTime = 20;
-unsigned long currentDelayTime = 0;
-
-volatile int newBrightnessValue = 0;
-volatile int oldBrightnessValue = 0;
-volatile uint8_t brightnessValue = 50;
-int currentBrightnessValue = 0;
 
 volatile int newFirstEncoderValue = 0;
 volatile int oldFirstEncoderValue = 0;
 volatile uint8_t firstEncoderValue = 0;
 int currentFirstEncoderValue = 0;
 
+volatile int newSecondEncoderValue = 0;
+volatile int oldSecondEncoderValue = 0;
+volatile uint8_t gapsBetweenGroupsOfDiods = 3;
+int currentGapsBetweenGroupsOfDiods = 3;
+
 volatile int newThirdEncoderValue = 0;
 volatile int oldThirdEncoderValue = 0;
-volatile uint8_t thirdEncoderValue = 0;
-int currentThirdEncoderValue = 0;
-volatile int thirdEncoderMode = 0;
-int currentThirdEncoderMode = 1;
+volatile uint8_t thirdEncoderValue = 200;
+int currentThirdEncoderValue = 200;
+
+volatile int newFourthEncoderValue = 0;
+volatile int oldFourthEncoderValue = 0;
+volatile unsigned long delayTime = 20;
+unsigned long currentDelayTime = 0;
+
+volatile int newFifthEncoderValue = 0;
+volatile int oldFifthEncoderValue = 0;
+volatile uint8_t fifthEncoderValue = 0;
+int currentFifthEncoderValue = 0;
+volatile int fifthEncoderMode = 0;
+int currentFifthEncoderMode = 1;
+
+volatile int newSixthEncoderValue = 0;
+volatile int oldSixthEncoderValue = 0;
+volatile uint8_t brightnessValue = 50;
+int currentBrightnessValue = 0;
+
+volatile int newSeventhEncoderValue = 0;
+volatile int oldSeventhEncoderValue = 0;
+volatile int modeNumber = 12;
+int currentModeNumber = 12;
 
 volatile bool isInRandomMode = false;
 bool isInSetMode = true;
@@ -385,46 +385,27 @@ bool isThisDisplayManageCurrentMode(int displayNumber) {
   }
 }
 
-void moved() {
-  if (isThisDisplayManageCurrentMode(3) == true) {
-    if (isInRandomMode == false) {
-      newSecondEncoderValue = encoder.getValue(0);
-      if (newSecondEncoderValue > oldSecondEncoderValue + 4) {
-        if (secondEncoderValue < 245) {
-          secondEncoderValue += 10;
-        }
-        oldSecondEncoderValue = newSecondEncoderValue;
-        isSomethingChanged = true;
-      } else if (newSecondEncoderValue + 4 < oldSecondEncoderValue) {
-        if (secondEncoderValue > 0) {
-          secondEncoderValue -= 10;
-        }
-        oldSecondEncoderValue = newSecondEncoderValue;
-        isSomethingChanged = true;
+void movedFirstPCF8574() {
+  if (isThisDisplayManageCurrentMode(0) == true) {
+    newZeroEncoderValue = firstPCF8574.getValue(3);
+    if (newZeroEncoderValue > oldZeroENcoderValue + 4) {
+      if (numberOfActivatedDiods < 255) {
+        numberOfActivatedDiods += 1;
       }
-    }
-  }
-
-  if (isThisDisplayManageCurrentMode(2) == true) {
-    newGapsBetweenGroupsOfDiods = encoder.getValue(1);
-    if (newGapsBetweenGroupsOfDiods > oldGapsBetweenGroupsOfDiods + 4) {
-      if (gapsBetweenGroupsOfDiods < 255) {
-        gapsBetweenGroupsOfDiods += 1;
-      }
-      oldGapsBetweenGroupsOfDiods = newGapsBetweenGroupsOfDiods;
+      oldZeroENcoderValue = newZeroEncoderValue;
       isSomethingChanged = true;
-    } else if (newGapsBetweenGroupsOfDiods + 4 < oldGapsBetweenGroupsOfDiods) {
-      if (gapsBetweenGroupsOfDiods > 0) {
-        gapsBetweenGroupsOfDiods -= 1;
+    } else if (newZeroEncoderValue + 4 < oldZeroENcoderValue) {
+      if (numberOfActivatedDiods > 0) {
+        numberOfActivatedDiods -= 1;
       }
-      oldGapsBetweenGroupsOfDiods = newGapsBetweenGroupsOfDiods;
+      oldZeroENcoderValue = newZeroEncoderValue;
       isSomethingChanged = true;
     }
   }
 
   if (isThisDisplayManageCurrentMode(1) == true) {
     if (isInRandomMode == false) {
-      newFirstEncoderValue = encoder.getValue(2);
+      newFirstEncoderValue = firstPCF8574.getValue(2);
       if (newFirstEncoderValue > oldFirstEncoderValue + 4) {
         if (firstEncoderValue < 245) {
           firstEncoderValue += 10;
@@ -441,92 +422,111 @@ void moved() {
     }
   }
 
-  if (isThisDisplayManageCurrentMode(0) == true) {
-    newNumberOfActivatedDidos = encoder.getValue(3);
-    if (newNumberOfActivatedDidos > oldNumberOfActivatedDidos + 4) {
-      if (numberOfActivatedDiods < 255) {
-        numberOfActivatedDiods += 1;
+  if (isThisDisplayManageCurrentMode(2) == true) {
+    newSecondEncoderValue = firstPCF8574.getValue(1);
+    if (newSecondEncoderValue > oldSecondEncoderValue + 4) {
+      if (gapsBetweenGroupsOfDiods < 255) {
+        gapsBetweenGroupsOfDiods += 1;
       }
-      oldNumberOfActivatedDidos = newNumberOfActivatedDidos;
+      oldSecondEncoderValue = newSecondEncoderValue;
       isSomethingChanged = true;
-    } else if (newNumberOfActivatedDidos + 4 < oldNumberOfActivatedDidos) {
-      if (numberOfActivatedDiods > 0) {
-        numberOfActivatedDiods -= 1;
+    } else if (newSecondEncoderValue + 4 < oldSecondEncoderValue) {
+      if (gapsBetweenGroupsOfDiods > 0) {
+        gapsBetweenGroupsOfDiods -= 1;
       }
-      oldNumberOfActivatedDidos = newNumberOfActivatedDidos;
+      oldSecondEncoderValue = newSecondEncoderValue;
       isSomethingChanged = true;
+    }
+  }
+
+  if (isThisDisplayManageCurrentMode(3) == true) {
+    if (isInRandomMode == false) {
+      newThirdEncoderValue = firstPCF8574.getValue(0);
+      if (newThirdEncoderValue > oldThirdEncoderValue + 4) {
+        if (thirdEncoderValue < 245) {
+          thirdEncoderValue += 10;
+        }
+        oldThirdEncoderValue = newThirdEncoderValue;
+        isSomethingChanged = true;
+      } else if (newThirdEncoderValue + 4 < oldThirdEncoderValue) {
+        if (thirdEncoderValue > 0) {
+          thirdEncoderValue -= 10;
+        }
+        oldThirdEncoderValue = newThirdEncoderValue;
+        isSomethingChanged = true;
+      }
     }
   }
 }
 
-void moved2() {
-  if (isThisDisplayManageCurrentMode(7)) {
-    newModeNumber = encoder2.getValue(0);
-    if (newModeNumber > oldModeNumber + 4) {
-      if (modeNumber < 42) {
-        modeNumber += 1;
+void movedSecondPCF8574() {
+  if (isThisDisplayManageCurrentMode(4)) {
+    newFourthEncoderValue = secondPCF8574.getValue(3);
+    if (newFourthEncoderValue > oldFourthEncoderValue + 4) {
+      if (delayTime < 255) {
+        delayTime += 10;
       }
-      oldModeNumber = newModeNumber;
+      oldFourthEncoderValue = newFourthEncoderValue;
       isSomethingChanged = true;
-      isModeChanged = true;
-  } else if (newModeNumber + 4 < oldModeNumber) {
-      if (modeNumber > 0) {
-        modeNumber -= 1;
+    } else if (newFourthEncoderValue + 4 < oldFourthEncoderValue) {
+      if (delayTime > 0) {
+        delayTime -= 10;
       }
-      oldModeNumber = newModeNumber;
-      isSomethingChanged = true;
-      isModeChanged = true;
-    }
-  }
-
-  if (isThisDisplayManageCurrentMode(6)) {
-    newBrightnessValue = encoder2.getValue(1);
-    if (newBrightnessValue > oldBrightnessValue + 4) {
-      if (brightnessValue < 245) {
-        brightnessValue += 10;
-      }
-      oldBrightnessValue = newBrightnessValue;
-      isSomethingChanged = true;
-    } else if (newBrightnessValue + 4 < oldBrightnessValue) {
-      if (brightnessValue > 0) {
-        brightnessValue -= 10;
-      }
-      oldBrightnessValue = newBrightnessValue;
+      oldFourthEncoderValue = newFourthEncoderValue;
       isSomethingChanged = true;
     }
   }
 
   if (isThisDisplayManageCurrentMode(5)) {
-    newThirdEncoderValue = encoder2.getValue(2);
-    if (newThirdEncoderValue > oldThirdEncoderValue + 4) {
-      if (thirdEncoderValue < 245) {
-        thirdEncoderValue += 1;
+    newFifthEncoderValue = secondPCF8574.getValue(2);
+    if (newFifthEncoderValue > oldFifthEncoderValue + 4) {
+      if (fifthEncoderValue < 245) {
+        fifthEncoderValue += 1;
       }
-      oldThirdEncoderValue = newThirdEncoderValue;
+      oldFifthEncoderValue = newFifthEncoderValue;
       isSomethingChanged = true;
-    } else if (newThirdEncoderValue + 4 < oldThirdEncoderValue) {
-      if (thirdEncoderValue > 0) {
-        thirdEncoderValue -= 1;
+    } else if (newFifthEncoderValue + 4 < oldFifthEncoderValue) {
+      if (fifthEncoderValue > 0) {
+        fifthEncoderValue -= 1;
       }
-      oldThirdEncoderValue = newThirdEncoderValue;
+      oldFifthEncoderValue = newFifthEncoderValue;
       isSomethingChanged = true;
     }
   }
-  
-  if (isThisDisplayManageCurrentMode(4)) {
-    newDelayTime = encoder2.getValue(3);
-    if (newDelayTime > oldDelayTime + 4) {
-      if (delayTime < 255) {
-        delayTime += 10;
+
+  if (isThisDisplayManageCurrentMode(6)) {
+    newSixthEncoderValue = secondPCF8574.getValue(1);
+    if (newSixthEncoderValue > oldSixthEncoderValue + 4) {
+      if (brightnessValue < 245) {
+        brightnessValue += 10;
       }
-      oldDelayTime = newDelayTime;
+      oldSixthEncoderValue = newSixthEncoderValue;
       isSomethingChanged = true;
-    } else if (newDelayTime + 4 < oldDelayTime) {
-      if (delayTime > 0) {
-        delayTime -= 10;
+    } else if (newSixthEncoderValue + 4 < oldSixthEncoderValue) {
+      if (brightnessValue > 0) {
+        brightnessValue -= 10;
       }
-      oldDelayTime = newDelayTime;
+      oldSixthEncoderValue = newSixthEncoderValue;
       isSomethingChanged = true;
+    }
+  }
+
+  if (isThisDisplayManageCurrentMode(7)) {
+    newSeventhEncoderValue = secondPCF8574.getValue(0);
+    if (newSeventhEncoderValue > oldSeventhEncoderValue + 4) {
+      if (modeNumber < 42) {
+        modeNumber += 1;
+      }
+      oldSeventhEncoderValue = newSeventhEncoderValue;
+      isSomethingChanged = true;
+      isModeChanged = true;
+  } else if (newSeventhEncoderValue + 4 < oldSeventhEncoderValue) {
+      if (modeNumber > 0) {
+        modeNumber -= 1;
+      }
+      oldSeventhEncoderValue = newSeventhEncoderValue;
+      isSomethingChanged = true;
+      isModeChanged = true;
     }
   }
 }
@@ -556,8 +556,6 @@ void clearDisplays() {
     myOLED.begin();
     myOLED.clrScr();
     myOLED.update();
-    Serial.print("clear display: ");
-    Serial.println(i);
     delay(100);
   }
 }
@@ -688,23 +686,23 @@ void fillFifthDisplay() {
   myOLED.clrScr();
 
   if (isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_setOrRandom) == true && isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_direction) == true){
-    if (thirdEncoderMode == THIRDENCMODE_setOrRandom) {
+    if (fifthEncoderMode == THIRDENCMODE_setOrRandom) {
       drawFillRightTriangle(); 
-    } else if (thirdEncoderMode == THIRDENCMODE_direction) {
+    } else if (fifthEncoderMode == THIRDENCMODE_direction) {
       drawFillLeftTriangle();
     }
   } else if (isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_setOrRandom) == true && isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_direction) == false) {
-    if (thirdEncoderMode == THIRDENCMODE_setOrRandom) {
+    if (fifthEncoderMode == THIRDENCMODE_setOrRandom) {
       drawFillRightTriangle();
-    } else if (thirdEncoderMode == THIRDENCMODE_direction) {
-      thirdEncoderMode = THIRDENCMODE_setOrRandom;
+    } else if (fifthEncoderMode == THIRDENCMODE_direction) {
+      fifthEncoderMode = THIRDENCMODE_setOrRandom;
       drawFillRightTriangle();
     }
   } else if (isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_setOrRandom) == false && isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_direction) == true) {
-    if (thirdEncoderMode == THIRDENCMODE_setOrRandom) {
+    if (fifthEncoderMode == THIRDENCMODE_setOrRandom) {
       drawFillLeftTriangle();
-      thirdEncoderMode = THIRDENCMODE_direction;
-    } else if (thirdEncoderMode == THIRDENCMODE_direction) {
+      fifthEncoderMode = THIRDENCMODE_direction;
+    } else if (fifthEncoderMode == THIRDENCMODE_direction) {
       drawFillLeftTriangle();
     }
   } else if (isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_setOrRandom) == false && isFifthDisplayManageCurrentFifthDisplayMode(THIRDENCMODE_direction) == false) {
@@ -731,7 +729,7 @@ void fillFifthDisplay() {
       sendValueToDisplay(1, firstEncoderValue);  
     }
     if (isThisDisplayManageCurrentMode(3) == true) {
-      sendValueToDisplay(3, secondEncoderValue);  
+      sendValueToDisplay(3, thirdEncoderValue);  
     }
   } else if (isInRandomMode == true) {
     drawChangeModeToRandomMode();
@@ -744,8 +742,8 @@ void fillFifthDisplay() {
 void changeSomethingAndSendItToDisplay() {
   isSomethingChanged = false;
   if (numberOfActivatedDiods != currentNumberOfActivatedDidos) {
-      currentNumberOfActivatedDidos = numberOfActivatedDiods;
-      sendValueToDisplay(0, numberOfActivatedDiods);
+    currentNumberOfActivatedDidos = numberOfActivatedDiods;
+    sendValueToDisplay(0, numberOfActivatedDiods);
   }
   if (firstEncoderValue != currentFirstEncoderValue) {
     currentFirstEncoderValue = firstEncoderValue;
@@ -755,9 +753,9 @@ void changeSomethingAndSendItToDisplay() {
     currentGapsBetweenGroupsOfDiods = gapsBetweenGroupsOfDiods;
     sendValueToDisplay(2, gapsBetweenGroupsOfDiods);
   }
-  if (secondEncoderValue != currentSecondEncoderValue) {
-    currentSecondEncoderValue = secondEncoderValue;
-    sendValueToDisplay(3, secondEncoderValue);
+  if (thirdEncoderValue != currentThirdEncoderValue) {
+    currentThirdEncoderValue = thirdEncoderValue;
+    sendValueToDisplay(3, thirdEncoderValue);
   }
   if (delayTime != currentDelayTime) {
     currentDelayTime = delayTime;
@@ -767,27 +765,26 @@ void changeSomethingAndSendItToDisplay() {
     fillFifthDisplay();
     isFifthEncPressed = false;
   }
-  if (thirdEncoderValue != currentThirdEncoderValue) {
-    
-    if (thirdEncoderMode == THIRDENCMODE_setOrRandom) {
-      if (thirdEncoderValue > currentThirdEncoderValue) {
+  if (fifthEncoderValue != currentFifthEncoderValue) {
+    if (fifthEncoderMode == THIRDENCMODE_setOrRandom) {
+      if (fifthEncoderValue > currentFifthEncoderValue) {
         isInRandomMode = true;
         isInSetMode = false;
-      } else if (thirdEncoderValue < currentThirdEncoderValue) {
+      } else if (fifthEncoderValue < currentFifthEncoderValue) {
         isInRandomMode = false;
         isInSetMode = true;
       }
-    } else if (thirdEncoderMode == THIRDENCMODE_direction) {
-      if (thirdEncoderValue > currentThirdEncoderValue) {
+    } else if (fifthEncoderMode == THIRDENCMODE_direction) {
+      if (fifthEncoderValue > currentFifthEncoderValue) {
         isDirectionRight = true;
         isDirectionLeft = false;
-      } else if (thirdEncoderValue < currentThirdEncoderValue) {
+      } else if (fifthEncoderValue < currentFifthEncoderValue) {
         isDirectionRight = false;
         isDirectionLeft = true;
       }
     }
     fillFifthDisplay();
-    currentThirdEncoderValue = thirdEncoderValue;
+    currentFifthEncoderValue = fifthEncoderValue;
   }
   if (brightnessValue != currentBrightnessValue) {
     currentBrightnessValue = brightnessValue;
@@ -805,11 +802,11 @@ int getDisplayValue(int displayNumber) {
     case 2:
       return gapsBetweenGroupsOfDiods;
     case 3:
-      return secondEncoderValue;
+      return thirdEncoderValue;
     case 4:
       return delayTime;
     case 5:
-      return thirdEncoderValue;
+      return fifthEncoderValue;
     case 6:
       return brightnessValue;
     case 7:
@@ -887,8 +884,8 @@ byte * Wheel(byte WheelPos) {
 }
 
 void checkUpdates() {
-  encoder.update();
-  encoder2.update();
+  firstPCF8574.update();
+  secondPCF8574.update();
   if (isSomethingChanged == true) {
     changeSomethingAndSendItToDisplay();
   }
@@ -900,7 +897,7 @@ void checkAndSetRandomOrSetMode() {
     secondColorParam = 255;
   } else if (isInSetMode == true) {
     firstColorParam = firstEncoderValue;
-    secondColorParam = secondEncoderValue;
+    secondColorParam = thirdEncoderValue;
   }
 }
 
@@ -1490,7 +1487,6 @@ void meteorRain() {
             setPixel(index - j, firstColorParam, secondColorParam);
           }
         }
-        
       } else if (isDirectionLeft == true) {
         index--;
         if (index < 0) {
@@ -1536,7 +1532,7 @@ void runningLights() {
       }
       if (isInSetMode) {
         firstColorParam = firstEncoderValue;
-        secondColorParam = secondEncoderValue;
+        secondColorParam = thirdEncoderValue;
       }
       if (isDirectionRight == true) {
         Position++;
@@ -1767,18 +1763,17 @@ void fadeInOut() {
 
 void customRgbLight() {
   bool isChanging = true;
-  while (true)
-  {
+  while (true) {
     if (isModeChanged == true) {
       return;
     }
-    encoder.update();
-    encoder2.update();
+    firstPCF8574.update();
+    secondPCF8574.update();
     if (isSomethingChanged == true) {
       changeSomethingAndSendItToDisplay();
       isChanging = true;
       firstColorParam = firstEncoderValue;
-      secondColorParam = secondEncoderValue;
+      secondColorParam = thirdEncoderValue;
     }
     if (isChanging == true) {
       for (int i = 0; i < LED_COUNT - 1; i++ ) {
@@ -1847,12 +1842,12 @@ void changeMode(int newmode) {
 
 void changeThirdEncMode() {
   if (isThisModeHasDirectionAndRandomOrSetMode() == true) {
-    if (thirdEncoderMode == THIRDENCMODE_setOrRandom) {
-      thirdEncoderMode = THIRDENCMODE_direction;
+    if (fifthEncoderMode == THIRDENCMODE_setOrRandom) {
+      fifthEncoderMode = THIRDENCMODE_direction;
       isSomethingChanged = true;
       isFifthEncPressed = true;
-    } else if (thirdEncoderMode == THIRDENCMODE_direction) {
-      thirdEncoderMode = THIRDENCMODE_setOrRandom;
+    } else if (fifthEncoderMode == THIRDENCMODE_direction) {
+      fifthEncoderMode = THIRDENCMODE_setOrRandom;
       isSomethingChanged = true;
       isFifthEncPressed = true;
     }
@@ -1864,20 +1859,20 @@ void setup() {
   Serial.println("system start");
 
   pinMode(2, INPUT_PULLUP);
-  attachInterrupt(0, moved, FALLING);
+  attachInterrupt(0, movedFirstPCF8574, FALLING);
 
   pinMode(3, INPUT_PULLUP);
-  attachInterrupt(1, moved2, FALLING);
+  attachInterrupt(1, movedSecondPCF8574, FALLING);
 
   pinMode(19, INPUT_PULLUP);
   attachInterrupt(4, changeThirdEncMode, RISING);
 
   Wire.begin();
   Wire.setClock(100000);
-  encoder.begin(4);
-  encoder.readInitialState();
-  encoder2.begin(4);
-  encoder2.readInitialState();
+  firstPCF8574.begin(4);
+  firstPCF8574.readInitialState();
+  secondPCF8574.begin(4);
+  secondPCF8574.readInitialState();
 
   setModeName(modeNumber);
 
